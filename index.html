@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
@@ -430,36 +431,161 @@ function buildNotifs() {
 }
 const NDOT = { late:"bg-red-500", soon:"bg-amber-500", assign:"bg-indigo-500", info:"bg-slate-400", leave:"bg-emerald-500", mood:"bg-violet-500" };
 
-/* =====================================================================
- *  SHELL
- * ===================================================================== */
-let CHARTS = [];
-function clearCharts() { CHARTS.forEach(c => { try { c.destroy(); } catch(e){} }); CHARTS = []; }
+window.MENU_EXPANDED = window.MENU_EXPANDED || {
+  "Dashboard": true,
+  "Công việc": true,
+  "AI Assistant": true,
+  "Phê duyệt & Đánh giá": true,
+  "Báo cáo & Tự động hóa": true,
+  "Hồ sơ & Quản trị": true
+};
+window.toggleMenuSection = function(title) {
+  window.MENU_EXPANDED[title] = !window.MENU_EXPANDED[title];
+  const sectionContent = document.getElementById('menu-section-' + title);
+  const chevron = document.getElementById('menu-chevron-' + title);
+  if (sectionContent) {
+    if (window.MENU_EXPANDED[title]) {
+      sectionContent.classList.remove('hidden');
+      chevron.classList.remove('rotate-0');
+      chevron.classList.add('rotate-180');
+    } else {
+      sectionContent.classList.add('hidden');
+      chevron.classList.remove('rotate-180');
+      chevron.classList.add('rotate-0');
+    }
+  }
+};
+
 function renderShell(page, title, subtitle, actions = "") {
   clearCharts();
   CURRENT_PAGE = page;
-  const menu = IS_BOSS ? MENU_BOSS : MENU_STAFF;
   const unread = buildNotifs().filter(n => n.unread).length;
+  
+  const sections = [
+    {
+      title: "Dashboard",
+      icon: "fa-solid fa-gauge-high",
+      items: [
+        { label: "Dashboard team", href: "boss-dashboard.html", icon: "fa-solid fa-users-viewfinder", bossOnly: true },
+        { label: "Dashboard cá nhân", href: "dashboard.html", icon: "fa-solid fa-user-gear" }
+      ]
+    },
+    {
+      title: "Công việc",
+      icon: "fa-solid fa-list-check",
+      items: [
+        { label: "Công việc của tôi", href: "task-list.html", icon: "fa-solid fa-circle text-[6px] text-blue-600" },
+        { label: "Lịch công việc", href: "calendar.html", icon: "fa-solid fa-calendar-days" },
+        { label: "Dự án phối hợp", href: "collab.html", icon: "fa-solid fa-network-wired" }
+      ]
+    },
+    {
+      title: "AI Assistant",
+      icon: "fa-solid fa-wand-magic-sparkles",
+      items: [
+        { label: "AI Assistant & Phân tích", href: "ai-assistant.html", icon: "fa-solid fa-chart-simple" }
+      ]
+    },
+    {
+      title: "Phê duyệt & Đánh giá",
+      icon: "fa-solid fa-stamp",
+      items: [
+        { label: "Luồng phê duyệt", href: "leaves.html", icon: "fa-solid fa-file-signature" },
+        { label: IS_BOSS ? "Đánh giá nhân viên" : "Đánh giá của tôi", href: "work-dna.html", icon: "fa-solid fa-user-check" }
+      ]
+    },
+    {
+      title: "Báo cáo & Tự động hóa",
+      icon: "fa-solid fa-chart-line",
+      items: [
+        { label: "Báo cáo tự động", href: "reports.html", icon: "fa-solid fa-file-chart-column" },
+        { label: "FPT Drive", href: "resources.html", icon: "fa-solid fa-hard-drive" }
+      ]
+    },
+    {
+      title: "Hồ sơ & Quản trị",
+      icon: "fa-solid fa-user-gear",
+      items: [
+        { label: "Hồ sơ cá nhân", href: "profile.html", icon: "fa-solid fa-user-tie" },
+        { label: "Phân quyền & người dùng", href: "permissions.html", icon: "fa-solid fa-users-cog", bossOnly: true },
+        { label: "Quản trị hệ thống", href: "admin-settings.html", icon: "fa-solid fa-gears", bossOnly: true }
+      ]
+    }
+  ];
+
+  const sectionsHtml = sections.map(sec => {
+    const visibleItems = sec.items.filter(item => !item.bossOnly || IS_BOSS);
+    if (visibleItems.length === 0) return "";
+    
+    const isExpanded = window.MENU_EXPANDED[sec.title];
+    
+    const itemsHtml = visibleItems.map(item => {
+      const isActive = item.href === page;
+      let iconHtml = `<i class="${item.icon} mr-2.5 text-slate-400 text-[12px] w-4 text-center"></i>`;
+      if (isActive) {
+        iconHtml = `<i class="fa-solid fa-circle mr-2.5 text-[6px] text-blue-600 w-4 text-center"></i>`;
+      }
+      
+      return `
+        <a href="${item.href}" class="flex items-center px-3.5 py-2 rounded-lg text-[12.5px] transition ${isActive ? `bg-blue-50 text-blue-700 font-semibold` : "text-slate-600 hover:bg-slate-50"}" style="${isActive ? 'color: #065292; background-color: #EAF4FC;' : ''}">
+          ${iconHtml}
+          <span>${item.label}</span>
+        </a>
+      `;
+    }).join("");
+
+    return `
+      <div class="border-b border-slate-100/50 pb-1.5">
+        <button onclick="window.toggleMenuSection('${sec.title}')" class="w-full flex items-center justify-between px-3 py-2 text-slate-700 hover:bg-slate-50 rounded-lg text-[13px] font-bold transition">
+          <div class="flex items-center">
+            <i class="${sec.icon} mr-2.5 text-slate-500 w-4 text-center"></i>
+            <span>${sec.title}</span>
+          </div>
+          <i id="menu-chevron-${sec.title}" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : 'rotate-0'}"></i>
+        </button>
+        <div id="menu-section-${sec.title}" class="pl-2.5 pr-1 py-0.5 space-y-0.5 ${isExpanded ? '' : 'hidden'}">
+          ${itemsHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+
   document.body.className = "bg-slate-50 text-slate-800 antialiased";
   document.body.innerHTML = `
   <div class="flex min-h-screen">
-    <aside class="w-[226px] shrink-0 bg-white border-r border-slate-200 flex flex-col sticky top-0 h-screen">
-      <div class="px-5 pt-5 pb-3 flex items-center gap-2">
-        <span class="w-8 h-8 rounded-[10px] grid place-items-center text-white shrink-0" style="background:linear-gradient(135deg,#023E7D,#1E7ABF);box-shadow:0 4px 10px rgba(0,100,177,.3)">
-          
+    <aside class="w-[245px] shrink-0 bg-white border-r border-slate-200 flex flex-col sticky top-0 h-screen">
+      <div class="px-5 pt-5 pb-3 flex items-center gap-3">
+        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #023E7D, #1E7ABF); box-shadow: 0 4px 10px rgba(0, 100, 177, 0.3)">
+          <i class="fa-solid fa-square-poll-horizontal text-[15px]"></i>
         </span>
-        <span class="font-extrabold text-slate-800 tracking-tight">Pro<span class="text-${AC}-600">Work</span></span>
+        <span class="font-extrabold text-[18px] text-slate-800 tracking-tight">Pro<span class="text-[#065292]">Work</span></span>
       </div>
-      <div class="mx-3 mb-3 p-3 rounded-xl bg-slate-50 flex items-center gap-2.5">
-        ${meAvatar("w-9 h-9 shrink-0")}
-        <div class="leading-tight min-w-0"><div class="text-[13px] font-semibold text-slate-800 truncate">${ME.name}</div><div class="text-[11px] text-slate-400 truncate">${ME.title}</div></div>
+      
+      <div class="mx-3 mb-3 p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between cursor-pointer hover:bg-slate-100/80 transition" onclick="location.hash='#profile.html'">
+        <div class="flex items-center gap-2.5 min-w-0">
+          ${meAvatar("w-9 h-9 shrink-0")}
+          <div class="leading-tight min-w-0">
+            <div class="text-[13px] font-semibold text-slate-800 truncate">${ME.name}</div>
+            <div class="text-[11px] text-slate-400 truncate">${ME.title}</div>
+          </div>
+        </div>
+        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 shrink-0 ml-1"></i>
       </div>
-      <nav class="px-2.5 flex-1 overflow-y-auto space-y-0.5">
-        ${menu.map(([href, lb]) => `<a href="${href}" class="flex items-center px-3 py-2 rounded-lg text-[13px] ${href===page?`bg-${AC}-50 text-${AC}-700 font-semibold`:"text-slate-600 hover:bg-slate-50"}"><span>${lb}</span>${href==="notifications.html"&&unread?`<span class="ml-auto bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5">${unread}</span>`:""}</a>`).join("")}
+
+      <nav class="px-2.5 flex-1 overflow-y-auto space-y-1 py-2">
+        ${sectionsHtml}
       </nav>
-      <div class="m-3 space-y-2">
-        <button onclick="switchRole()" class="w-full text-[11.5px] font-semibold border border-slate-200 rounded-lg py-2 text-slate-600 hover:bg-slate-50">${IS_BOSS?"Xem thử: Nhân viên":"Xem thử: Sếp"}</button>
-        <button onclick="logout()" class="w-full text-[11.5px] font-semibold border border-red-200 text-red-600 rounded-lg py-2 hover:bg-red-50 flex items-center justify-center gap-1.5">⎋ Đăng xuất</button>
+
+      <div class="p-3 border-t border-slate-100 space-y-1.5 bg-white">
+        <button onclick="switchRole()" class="w-full text-[11px] font-semibold bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg py-1.5 text-slate-600 transition flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-user-astronaut text-[11px]"></i> ${IS_BOSS ? "Xem thử: Nhân viên" : "Xem thử: Sếp"}
+        </button>
+        <button onclick="alert('Tính năng thu gọn menu đang được phát triển (demo)')" class="w-full text-[11.5px] font-semibold border border-slate-200 rounded-lg py-2 text-slate-600 hover:bg-slate-50 flex items-center justify-center gap-1.5">
+          <i class="fa-solid fa-angles-left text-[11px]"></i> Thu gọn menu
+        </button>
+        <button onclick="logout()" class="w-full text-[12px] font-bold bg-red-50 text-red-600 border border-red-100 rounded-lg py-2.5 hover:bg-red-100/60 flex items-center justify-center gap-1.5 transition">
+          <i class="fa-solid fa-power-off text-[11px]"></i> Đăng xuất
+        </button>
       </div>
     </aside>
     <div class="flex-1 min-w-0">
@@ -470,7 +596,7 @@ function renderShell(page, title, subtitle, actions = "") {
         <div class="ml-auto hidden lg:block"><input placeholder="Tìm kiếm task, dự án, nhân sự…" class="w-60 text-[12.5px] border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-${AC}-200"></div>
         <button onclick="openTaskModal()" class="bg-${AC}-600 text-white text-[12.5px] font-semibold px-3.5 py-2 rounded-lg shrink-0">Tạo task</button>
         ${actions}
-        <button onclick="location.hash='#notifications.html'" title="Thông báo" class="relative shrink-0 w-9 h-9 grid place-items-center rounded-lg border border-slate-200 text-slate-500 hover:bg-${AC}-50 hover:text-${AC}-600 hover:border-${AC}-200 text-[16px] leading-none">🔔${unread?`<span class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full px-1 min-w-[16px] text-center leading-[16px]">${unread}</span>`:""}</button>
+        <button onclick="location.hash='#notifications.html'" title="Thông báo" class="relative shrink-0 w-9 h-9 grid place-items-center rounded-lg border border-slate-200 text-slate-500 hover:bg-${AC}-50 hover:text-${AC}-600 hover:border-${AC}-200 text-[16px] leading-none">🔔${unread?`<span class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5">${unread}</span>`:""}</button>
         <button onclick="toggleChat()" class="text-[12.5px] font-semibold text-white bg-${AC}-600 hover:bg-${AC}-700 rounded-lg px-3.5 py-2 shrink-0 shadow-sm flex items-center gap-1.5">Tin nhắn <span class="bg-white text-${AC}-700 rounded-full px-1.5 text-[11px] font-bold">7</span></button>
       </header>
       <main class="p-6 w-full max-w-[1340px]">${
