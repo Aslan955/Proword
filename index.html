@@ -36,6 +36,7 @@ tailwind.config = {
 </head>
 <body class="antialiased">
 <script>
+
 /* Bảng màu kế thừa Quy chuẩn FSC-Insight: xanh #0064B1 · cam #EF7025 · lá #21B14B · tím AI #7C3AED */
 tailwind.config = {
   theme: { extend: {
@@ -105,6 +106,7 @@ function meAvatar(size, extra) {
   return `<span class="${s} rounded-full grid place-items-center text-white font-bold ${extra||""}" style="background:${ME.color}">${ME.initial}</span>`;
 }
 function switchRole() { localStorage.setItem("pw_role", IS_BOSS ? "staff" : "boss"); location.reload(); }
+function logout(){ if(!confirm("Đăng xuất khỏi tài khoản hiện tại để đăng nhập tài khoản khác?")) return; localStorage.removeItem("pw_logged"); location.hash=""; location.reload(); }
 
 /* ---------- NHÓM CHUYÊN MÔN ---------- */
 const GROUPS = { ADS:["Nam Phạm","Huy Lê"], SEO:["Ánh Dương","Linh Trần"], CRM:["Minh Hoàng"], CDP:["Nguyễn Văn Nam"] };
@@ -412,7 +414,7 @@ function toggleStatus(cb, fn) {
 const passStatus = (t) => !window.statusFilter.length || window.statusFilter.includes(dstat(t));
 
 /* ---------- MENU ---------- */
-const MENU_BOSS = [["boss-dashboard.html","Dashboard team"],["dashboard.html","Dashboard cá nhân"],["task-list.html","Công việc của tôi"],["collab.html","Dự án phối hợp"],["calendar.html","Lịch công việc"],["ai-assistant.html","AI Assistant"],["leaves.html","Luồng phê duyệt"],["work-dna.html","Đánh giá nhân viên"],["reports.html","Báo cáo tự động"],["resources.html","FPT Drive"],["profile.html","Hồ sơ cá nhân"],["admin-settings.html","Quản trị hệ thống"]];
+const MENU_BOSS = [["boss-dashboard.html","Dashboard team"],["dashboard.html","Dashboard cá nhân"],["task-list.html","Công việc của tôi"],["collab.html","Dự án phối hợp"],["calendar.html","Lịch công việc"],["ai-assistant.html","AI Assistant"],["leaves.html","Luồng phê duyệt"],["work-dna.html","Đánh giá nhân viên"],["reports.html","Báo cáo tự động"],["resources.html","FPT Drive"],["profile.html","Hồ sơ cá nhân"],["permissions.html","Phân quyền & người dùng"],["admin-settings.html","Quản trị hệ thống"]];
 const MENU_STAFF = [["dashboard.html","Dashboard cá nhân"],["task-list.html","Công việc của tôi"],["collab.html","Dự án phối hợp"],["calendar.html","Lịch làm việc"],["ai-assistant.html","AI Assistant"],["leaves.html","Luồng phê duyệt"],["work-dna.html","Đánh giá của tôi"],["reports.html","Báo cáo tự động"],["resources.html","FPT Drive"],["profile.html","Hồ sơ cá nhân"]];
 
 /* ---------- THÔNG BÁO suy ra từ luật ---------- */
@@ -455,7 +457,10 @@ function renderShell(page, title, subtitle, actions = "") {
       <nav class="px-2.5 flex-1 overflow-y-auto space-y-0.5">
         ${menu.map(([href, lb]) => `<a href="${href}" class="flex items-center px-3 py-2 rounded-lg text-[13px] ${href===page?`bg-${AC}-50 text-${AC}-700 font-semibold`:"text-slate-600 hover:bg-slate-50"}"><span>${lb}</span>${href==="notifications.html"&&unread?`<span class="ml-auto bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5">${unread}</span>`:""}</a>`).join("")}
       </nav>
-      <button onclick="switchRole()" class="m-3 text-[11.5px] font-semibold border border-slate-200 rounded-lg py-2 text-slate-600 hover:bg-slate-50">${IS_BOSS?"Xem thử: Nhân viên":"Xem thử: Sếp"}</button>
+      <div class="m-3 space-y-2">
+        <button onclick="switchRole()" class="w-full text-[11.5px] font-semibold border border-slate-200 rounded-lg py-2 text-slate-600 hover:bg-slate-50">${IS_BOSS?"Xem thử: Nhân viên":"Xem thử: Sếp"}</button>
+        <button onclick="logout()" class="w-full text-[11.5px] font-semibold border border-red-200 text-red-600 rounded-lg py-2 hover:bg-red-50 flex items-center justify-center gap-1.5">⎋ Đăng xuất</button>
+      </div>
     </aside>
     <div class="flex-1 min-w-0">
       <header class="sticky top-0 z-10 bg-white/90 backdrop-blur border-b border-slate-200 px-6 py-3 flex items-center gap-3 relative">
@@ -2497,13 +2502,68 @@ function renderCollabDetail(query){
   document.getElementById("content").innerHTML = header + body;
 }
 
+
+/* ===================== PHÂN QUYỀN & NGƯỜI DÙNG ===================== */
+let PTAB="matrix";
+const PERM_ACTIONS=[["create","Tạo (Create)","Tạo mới task / đơn / nội dung"],["view","Xem (View)","Xem dữ liệu được phân công"],["edit","Chỉnh sửa (Edit)","Sửa nội dung mình phụ trách"],["delete","Xóa (Delete)","Xóa task / dữ liệu"],["approve","Duyệt (Approve)","Phê duyệt task / đơn nghỉ / chi phí"],["reports","Xem báo cáo","Truy cập Báo cáo tự động"],["mdash","Dashboard quản lý","Xem Dashboard team & năng lực"],["admin","Quản trị hệ thống","Quản lý tài khoản, vai trò, cấu hình"]];
+const PERM_ROLES=[["member","Member","bg-slate-100 text-slate-600"],["manager","Manager","bg-violet-100 text-violet-700"],["admin","Admin","bg-indigo-100 text-indigo-700"]];
+const PERM_MATRIX={member:{create:1,view:1,edit:1,delete:1,approve:0,reports:0,mdash:0,admin:0},manager:{create:1,view:1,edit:1,delete:1,approve:1,reports:1,mdash:1,admin:0},admin:{create:1,view:1,edit:1,delete:1,approve:1,reports:1,mdash:1,admin:1}};
+function renderPermissions(){ if(!IS_BOSS){ location.hash="#dashboard.html"; return; } PTAB="matrix"; renderShell("permissions.html","Phân quyền & người dùng","Ma trận quyền theo vai trò · tạo user · tạo role",""); paintPerm(); }
+function setPTab(t){ PTAB=t; paintPerm(); }
+function togglePerm(r,a){ PERM_MATRIX[r][a]=PERM_MATRIX[r][a]?0:1; paintPerm(); }
+function permBadges(role){ return PERM_ACTIONS.filter(([k])=>PERM_MATRIX[role][k]).map(([k,lb])=>`<span class="px-2 py-0.5 rounded-full text-[10.5px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-100">${lb.split(" (")[0]}</span>`).join(" ")||'<span class="text-slate-400 text-[11px]">— chưa có quyền —</span>'; }
+function ptabBtn(k,lb){ return `<button onclick="setPTab('${k}')" class="px-5 py-1.5 rounded-md text-[12.5px] font-semibold ${PTAB===k?`bg-${AC}-600 text-white`:"text-slate-500"}">${lb}</button>`; }
+function paintPerm(){
+  let body="";
+  if(PTAB==="matrix"){
+    body=`<div class="bg-white border border-slate-200 rounded-xl p-4 overflow-x-auto">
+      <div class="flex items-center mb-3"><h3 class="font-bold text-[14px]">Ma trận phân quyền theo vai trò</h3><span class="ml-auto text-[11.5px] text-slate-400">Bấm vào ô để bật/tắt quyền</span></div>
+      <table class="w-full text-[12.5px] min-w-[640px]"><thead><tr class="text-left text-[11px] uppercase text-slate-400 border-b-2 border-slate-100"><th class="py-2 pr-3">Quyền / Hành động</th>${PERM_ROLES.map(([k,lb,cls])=>`<th class="px-3 text-center"><span class="px-2 py-0.5 rounded-full text-[10.5px] font-bold ${cls}">${lb}</span></th>`).join("")}</tr></thead>
+      <tbody>${PERM_ACTIONS.map(([a,lb,desc])=>`<tr class="border-b border-slate-50"><td class="py-2.5 pr-3"><div class="font-semibold text-slate-700">${lb}</div><div class="text-[10.5px] text-slate-400">${desc}</div></td>${PERM_ROLES.map(([r])=>{const on=PERM_MATRIX[r][a];return `<td class="px-3 text-center"><button onclick="togglePerm('${r}','${a}')" class="w-7 h-7 rounded-lg grid place-items-center mx-auto ${on?"bg-emerald-100 text-emerald-700 border border-emerald-300":"bg-slate-50 text-slate-300 border border-slate-200"}">${on?"✓":"–"}</button></td>`;}).join("")}</tr>`).join("")}</tbody></table>
+      <div class="flex justify-end mt-4"><button onclick="alert('Đã lưu ma trận phân quyền. (demo)')" class="bg-${AC}-600 text-white text-[12.5px] font-semibold px-5 py-2 rounded-lg">Lưu thay đổi</button></div></div>
+    <div class="grid md:grid-cols-3 gap-3 mt-4">${PERM_ROLES.map(([r,lb,cls])=>`<div class="bg-white border border-slate-200 rounded-xl p-4"><div class="flex items-center gap-2 mb-2"><span class="px-2 py-0.5 rounded-full text-[10.5px] font-bold ${cls}">${lb}</span><span class="text-[11px] text-slate-400">${PERM_ACTIONS.filter(([k])=>PERM_MATRIX[r][k]).length}/${PERM_ACTIONS.length} quyền</span></div><div class="flex flex-wrap gap-1">${permBadges(r)}</div></div>`).join("")}</div>`;
+  } else if(PTAB==="user"){
+    body=`<div class="grid md:grid-cols-3 gap-4"><div class="md:col-span-2 bg-white border border-slate-200 rounded-xl p-5">
+      <h3 class="font-bold text-[14px] mb-3">Tạo tài khoản người dùng</h3>
+      <div class="grid md:grid-cols-2 gap-3 text-[12.5px]">
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Họ và tên <span class="text-red-500">*</span></label><input id="nuName" class="w-full border border-slate-200 rounded-lg px-3 py-2.5"></div>
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Email <span class="text-red-500">*</span></label><input id="nuEmail" class="w-full border border-slate-200 rounded-lg px-3 py-2.5" placeholder="ten@fpt.edu.vn"></div>
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Chức danh</label><input id="nuTitle" class="w-full border border-slate-200 rounded-lg px-3 py-2.5" placeholder="vd: Content Executive"></div>
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Phòng / Nhóm</label><select id="nuGroup" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 bg-white">${Object.keys(GROUPS).map(g=>`<option>${g}</option>`).join("")}</select></div>
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Vai trò <span class="text-red-500">*</span></label><select id="nuRole" onchange="updateUserPreview()" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 bg-white">${PERM_ROLES.map(([k,lb])=>`<option value="${k}">${lb}</option>`).join("")}</select></div>
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Cơ sở</label><select id="nuSite" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 bg-white"><option>FPT School Hà Nam</option><option>FPT School Bắc Ninh</option></select></div>
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Mật khẩu khởi tạo</label><input id="nuPass" type="text" value="Prowork@2026" class="w-full border border-slate-200 rounded-lg px-3 py-2.5"></div>
+      </div>
+      <div class="flex justify-end gap-2 mt-4"><button onclick="setPTab('matrix')" class="border border-slate-200 text-slate-600 font-semibold text-[12.5px] px-4 py-2 rounded-lg">Hủy</button><button onclick="createUserMock()" class="bg-${AC}-600 text-white font-semibold text-[12.5px] px-5 py-2 rounded-lg">Tạo tài khoản</button></div></div>
+    <div class="bg-violet-50 border border-violet-100 rounded-xl p-4"><h4 class="font-bold text-[13px] text-violet-700 mb-2">Quyền theo vai trò</h4><p class="text-[11.5px] text-slate-500 mb-2">Tài khoản sẽ được cấp các quyền sau (theo ma trận):</p><div id="userPermPreview" class="flex flex-wrap gap-1">${permBadges("member")}</div></div></div>`;
+  } else {
+    body=`<div class="grid md:grid-cols-3 gap-4"><div class="md:col-span-2 bg-white border border-slate-200 rounded-xl p-5">
+      <h3 class="font-bold text-[14px] mb-3">Tạo vai trò (Role) mới</h3>
+      <div class="grid md:grid-cols-2 gap-3 text-[12.5px] mb-3">
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Tên vai trò <span class="text-red-500">*</span></label><input id="nrName" class="w-full border border-slate-200 rounded-lg px-3 py-2.5" placeholder="vd: Team Leader"></div>
+        <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Sao chép quyền từ</label><select id="nrBase" onchange="updateRoleChecks()" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 bg-white">${PERM_ROLES.map(([k,lb])=>`<option value="${k}">${lb}</option>`).join("")}</select></div>
+      </div>
+      <div class="mb-3"><label class="text-[11px] font-semibold text-slate-500 block mb-1">Mô tả</label><input id="nrDesc" class="w-full border border-slate-200 rounded-lg px-3 py-2.5" placeholder="Mô tả ngắn về vai trò"></div>
+      <label class="text-[11px] font-semibold text-slate-500 block mb-2">Quyền hạn của vai trò</label>
+      <div id="nrPerms" class="grid md:grid-cols-2 gap-2">${PERM_ACTIONS.map(([a,lb,desc])=>`<label class="flex items-start gap-2 border border-slate-200 rounded-lg px-3 py-2 cursor-pointer hover:bg-slate-50"><input type="checkbox" data-act="${a}" class="mt-0.5 accent-${AC}-600 w-4 h-4"><div><div class="text-[12.5px] font-semibold text-slate-700">${lb}</div><div class="text-[10.5px] text-slate-400">${desc}</div></div></label>`).join("")}</div>
+      <div class="flex justify-end gap-2 mt-4"><button onclick="setPTab('matrix')" class="border border-slate-200 text-slate-600 font-semibold text-[12.5px] px-4 py-2 rounded-lg">Hủy</button><button onclick="createRoleMock()" class="bg-${AC}-600 text-white font-semibold text-[12.5px] px-5 py-2 rounded-lg">Tạo vai trò</button></div></div>
+    <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 text-[12px] text-slate-500"><h4 class="font-bold text-[13px] text-slate-700 mb-2">Gợi ý</h4>Vai trò mới sẽ xuất hiện trong danh sách khi tạo user. Có thể tinh chỉnh quyền bất cứ lúc nào ở tab <b>Ma trận phân quyền</b>.</div></div>`;
+  }
+  document.getElementById("content").innerHTML=`<div class="flex bg-white border border-slate-200 rounded-lg p-0.5 w-fit mb-4">${ptabBtn("matrix","Ma trận phân quyền")}${ptabBtn("user","Tạo user")}${ptabBtn("role","Tạo role")}</div>${body}`;
+  if(PTAB==="role") updateRoleChecks();
+}
+function updateUserPreview(){ const r=(document.getElementById("nuRole")||{}).value||"member"; const el=document.getElementById("userPermPreview"); if(el) el.innerHTML=permBadges(r); }
+function updateRoleChecks(){ const base=(document.getElementById("nrBase")||{}).value||"member"; document.querySelectorAll("#nrPerms input[data-act]").forEach(c=>{ c.checked=!!PERM_MATRIX[base][c.getAttribute("data-act")]; }); }
+function createUserMock(){ const n=(document.getElementById("nuName")||{}).value||""; const e=(document.getElementById("nuEmail")||{}).value||""; const r=(document.getElementById("nuRole")||{}).value||"member"; if(!n.trim()||!e.trim()){ alert("Vui lòng nhập Họ tên và Email."); return; } const rl=(PERM_ROLES.find(x=>x[0]===r)||[])[1]||r; alert(`Đã tạo tài khoản "${n}" (${e}) — vai trò ${rl}. (demo)`); }
+function createRoleMock(){ const n=(document.getElementById("nrName")||{}).value||""; if(!n.trim()){ alert("Vui lòng nhập tên vai trò."); return; } const acts=[...document.querySelectorAll("#nrPerms input[data-act]:checked")].map(c=>c.getAttribute("data-act")); alert(`Đã tạo vai trò "${n}" với ${acts.length} quyền. (demo)`); }
+
 const ROUTES = {
   "boss-dashboard.html":renderBossDashboard, "dashboard.html":renderDashboard, "task-list.html":renderTaskList, "collab.html":renderCollab, "collab-new.html":renderCollabNew, "collab-detail.html":renderCollabDetail,
   "task-detail.html":renderTaskDetail, "calendar.html":renderCalendar, "ai-assistant.html":renderAIAssistant,
   "leaves.html":renderLeaves, "work-dna.html":renderWorkDNA, "reports.html":renderReports,
   "resources.html":renderResources,
   "notifications.html":renderNotifications, "profile.html":renderProfile,
-  "admin-settings.html":renderAdmin,
+  "admin-settings.html":renderAdmin, "permissions.html":renderPermissions,
 };
 document.addEventListener("click", (e) => {
   const a = e.target.closest("a"); if (!a) return;
@@ -2531,6 +2591,7 @@ function router() {
 window.addEventListener("hashchange", router);
 window.addEventListener("DOMContentLoaded", router);
 router();
+
 
 
 </script>
