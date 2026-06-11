@@ -431,6 +431,9 @@ function buildNotifs() {
 }
 const NDOT = { late:"bg-red-500", soon:"bg-amber-500", assign:"bg-indigo-500", info:"bg-slate-400", leave:"bg-emerald-500", mood:"bg-violet-500" };
 
+let CHARTS = [];
+function clearCharts() { CHARTS.forEach(c => { try { c.destroy(); } catch(e){} }); CHARTS = []; }
+
 window.MENU_EXPANDED = window.MENU_EXPANDED || {
   "Dashboard": true,
   "Công việc": true,
