@@ -7,7 +7,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script>
@@ -33,6 +32,15 @@ tailwind.config = {
   html, body { font-family:"Inter",ui-sans-serif,system-ui,sans-serif; }
   .kcol.drag-over { outline:2px dashed #0064B1; outline-offset:-4px; background:#E6F0F8; }
   .kcard.dragging { opacity:.45; }
+  .pw-side{width:230px;transition:width .15s ease}
+  .pw-side.scol{width:70px}
+  .pw-side.scol .nav-text,.pw-side.scol .logo-text,.pw-side.scol .user-text,.pw-side.scol .side-btn-text{display:none}
+  .pw-side.scol summary,.pw-side.scol .nav-item{padding-left:.5rem;padding-right:.5rem}
+  .nav-group summary{list-style:none}
+  .nav-group summary::-webkit-details-marker{display:none}
+  .nav-group:not([open]) .nav-chev{transform:rotate(180deg)}
+  .xclose{transition:color .12s, background-color .12s}
+  .xclose:hover{color:#E0312B !important}
 </style>
 </head>
 <body class="antialiased">
@@ -108,6 +116,19 @@ function meAvatar(size, extra) {
 }
 function switchRole() { localStorage.setItem("pw_role", IS_BOSS ? "staff" : "boss"); location.reload(); }
 function logout(){ if(!confirm("Đăng xuất khỏi tài khoản hiện tại để đăng nhập tài khoản khác?")) return; localStorage.removeItem("pw_logged"); location.hash=""; location.reload(); }
+function toggleSidebar(){ const a=document.getElementById("sidebar"); if(!a) return; const on=a.classList.toggle("scol"); localStorage.setItem("pw_scol", on?"1":"0"); }
+function ic(n,cls){ const P={grid:"M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",users:"M16 11a3 3 0 100-6 3 3 0 000 6zM8 11a3 3 0 100-6 3 3 0 000 6zM2 20c0-2.5 2.5-4 6-4M22 20c0-2.5-2.5-4-6-4M9 20c0-2.2 1.4-3.4 3-3.4s3 1.2 3 3.4",user:"M12 12a4 4 0 100-8 4 4 0 000 8zM4 20c0-3 3.5-5 8-5s8 2 8 5",brief:"M4 7h16v12H4zM9 7V5h6v2",clip:"M9 4h6v2H9zM7 6h10v14H7zM9 11h6M9 15h4",cal:"M4 6h16v14H4zM4 9h16M8 3v4M16 3v4",proj:"M6 6h5v5H6zM13 13h5v5h-5zM11 8.5h3M9.5 11v3",spark:"M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z",check:"M5 7h11v13H5zM8 4h5v3H8zM8 13l2 2 4-4",star:"M12 4l2.3 4.7 5.2.8-3.8 3.7.9 5.2L12 16.6 7.4 18.4l.9-5.2L4.5 9.3l5.2-.8z",chart:"M4 20V10M10 20V4M16 20v-7M20 20H3",folder:"M3 7h6l2 2h10v10H3z",shield:"M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z",gear:"M12 9a3 3 0 100 6 3 3 0 000-6zM19.4 13a7.5 7.5 0 000-2l2-1.5-2-3.4-2.3 1a7 7 0 00-1.7-1L17 3.5h-4l-.4 2.6a7 7 0 00-1.7 1l-2.3-1-2 3.4 2 1.5a7.5 7.5 0 000 2l-2 1.5 2 3.4 2.3-1a7 7 0 001.7 1l.4 2.6h4l.4-2.6a7 7 0 001.7-1l2.3 1 2-3.4z",smile:"M12 21a9 9 0 100-18 9 9 0 000 18zM9 10h.01M15 10h.01M8.5 14a4.5 4.5 0 007 0",search:"M16.5 16.5L21 21M11 18a7 7 0 110-14 7 7 0 010 14z",thread:"M4 5h16v10H9l-4 4zM8 9h8M8 12h5",userplus:"M9 11a4 4 0 100-8 4 4 0 000 8M3 20a6 6 0 0112 0M18 8v6M21 11h-6",image:"M3 5h18v14H3zM3 16l5-5 4 4 3-3 6 6M8.5 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3",clip2:"M21 11l-8.5 8.5a4 4 0 01-6-6l8.6-8.6a2.6 2.6 0 013.7 3.7l-8.6 8.6a1 1 0 01-1.5-1.5l7.9-7.9",at:"M16 12a4 4 0 10-1.1 2.8M16 8v5.5a2.5 2.5 0 005 0V12a9 9 0 10-3.5 7.1",reply:"M9 17l-5-5 5-5M4 12h11a4 4 0 014 4v2",edit:"M4 20h4L20 8l-4-4L4 16zM14 6l4 4",trash:"M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6",plus:"M12 5v14M5 12h14"}; return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" class="${cls||"w-[18px] h-[18px]"}"><path d="${P[n]||P.grid}"/></svg>`; }
+function navGroups(){
+  const dash=[]; if(IS_BOSS) dash.push(["boss-dashboard.html","Dashboard team","users"]); dash.push(["dashboard.html","Dashboard cá nhân","user"]);
+  return [
+    {title:"Dashboard",icon:"grid",items:dash},
+    {title:"Công việc",icon:"brief",items:[["task-list.html","Công việc của tôi","clip"],["calendar.html","Lịch công việc","cal"],["collab.html","Dự án phối hợp","proj"]]},
+    {title:"AI Assistant",icon:"spark",items:[["ai-assistant.html","AI Assistant & Phân tích","spark"]]},
+    {title:"Phê duyệt & Đánh giá",icon:"check",items:[["leaves.html","Luồng phê duyệt","check"],["mood-check.html",IS_BOSS?"Mood check team":"Mood check","smile"],["work-dna.html",IS_BOSS?"Đánh giá nhân viên":"Đánh giá của tôi","star"]]},
+    {title:"Báo cáo & Tự động hóa",icon:"chart",items:[["reports.html","Báo cáo tự động","chart"],["resources.html","FPT Drive","folder"]]},
+    {title:"Hồ sơ & Quản trị",icon:"shield",items:[["profile.html","Hồ sơ cá nhân","user"]].concat(IS_BOSS?[["permissions.html","Phân quyền & người dùng","users"],["admin-settings.html","Quản trị hệ thống","gear"]]:[])},
+  ];
+}
 
 /* ---------- NHÓM CHUYÊN MÔN ---------- */
 const GROUPS = { ADS:["Nam Phạm","Huy Lê"], SEO:["Ánh Dương","Linh Trần"], CRM:["Minh Hoàng"], CDP:["Nguyễn Văn Nam"] };
@@ -188,8 +209,9 @@ const EXPENSES = [
   { id:3, who:"Huy Lê",    title:"Thuê thiết kế banner ngoài",           amount:"3.000.000đ",  group:"ADS", status:"approved" },
   { id:4, who:"Minh Hoàng",title:"Nâng cấp tài khoản CRM HubSpot",       amount:"6.200.000đ",  group:"CRM", status:"rejected" },
 ];
-const MOOD_TODAY = { "Linh Trần":"pressured", "Huy Lê":"very", "Nam Phạm":"normal", "Ánh Dương":"normal", "Minh Hoàng":"normal" };
-const MOODS = [["normal","","Bình thường"],["pressured","","Áp lực"],["very","","Rất áp lực"]];
+const MOOD_TODAY = { "Linh Trần":"pressured", "Huy Lê":"burst", "Nam Phạm":"happy", "Ánh Dương":"normal", "Minh Hoàng":"happy" };
+const MOODS = [["happy","😄","Vui vẻ","emerald"],["normal","🙂","Bình thường","sky"],["pressured","😣","Áp lực","amber"],["burst","🔥","Bùng nổ","red"]];
+const MOOD_MAP = Object.fromEntries(MOODS.map(m=>[m[0],m]));
 
 /* =====================================================================
  *  METRICS ENGINE — mọi chỉ số suy ra từ TASKS
@@ -389,7 +411,7 @@ function openTaskPopup(title, list) {
     <tr class="border-b border-slate-50 hover:bg-slate-50"><td class="py-2.5 px-2"><a href="task-detail.html?id=${t.id}" class="font-semibold text-slate-700 hover:text-${AC}-600">${t.title}</a><div class="text-[10.5px] text-slate-400">${t.spec} · ${t.skill}</div></td><td class="px-2">${avatar(t.assignee)} <span class="text-[11px] ml-1">${t.assignee.split(" ").pop()}</span></td><td class="px-2">${badge(dstat(t))}</td><td class="px-2">${prio(t.prio)}</td><td class="px-2 w-24">${progressBar(t.pct)}<span class="text-[10px] text-slate-400">${t.pct}%</span></td><td class="px-2 text-slate-500 text-[11.5px]">${fmtDue(t.due)}</td></tr>`).join("");
   document.body.insertAdjacentHTML("beforeend", `<div id="taskPop" class="fixed inset-0 z-[60] bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)closeTaskPop()">
     <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[82vh] overflow-hidden flex flex-col shadow-2xl">
-      <div class="px-5 py-3 border-b border-slate-200 flex items-center"><h3 class="font-bold text-[15px]">${title} <span class="text-slate-400 font-normal">· ${list.length}</span></h3><button onclick="closeTaskPop()" class="ml-auto text-slate-400 text-xl leading-none">×</button></div>
+      <div class="px-5 py-3 border-b border-slate-200 flex items-center"><h3 class="font-bold text-[15px]">${title} <span class="text-slate-400 font-normal">· ${list.length}</span></h3><button onclick="closeTaskPop()" class="ml-auto text-slate-400 text-xl leading-none xclose">×</button></div>
       <div class="overflow-y-auto p-2">${list.length?`<table class="w-full text-[12.5px]"><thead><tr class="text-left text-[10.5px] uppercase text-slate-400 border-b border-slate-100"><th class="py-2 px-2">Task</th><th class="px-2">Người làm</th><th class="px-2">Trạng thái</th><th class="px-2">Ưu tiên</th><th class="px-2">Tiến độ</th><th class="px-2">Hạn</th></tr></thead><tbody>${rows}</tbody></table>`:`<div class="p-10 text-center text-slate-400">Không có task nào.</div>`}</div>
     </div></div>`);
 }
@@ -421,174 +443,55 @@ const MENU_STAFF = [["dashboard.html","Dashboard cá nhân"],["task-list.html","
 /* ---------- THÔNG BÁO suy ra từ luật ---------- */
 function buildNotifs() {
   const list = [];
-  TASKS.filter(isOverdue).forEach(t => list.push({ type:"late", title:`Quá hạn: ${t.title}`, body:`${t.assignee} · trễ ${Math.floor(daysBetween(t.due,NOW))} ngày`, time:"Tự động", unread:true }));
-  TASKS.filter(t => t.status!=="done" && !isOverdue(t) && daysBetween(NOW,t.due) <= 1).forEach(t => list.push({ type:"soon", title:`Sắp đến hạn: ${t.title}`, body:`${t.assignee} · hạn ${fmtDue(t.due)}`, time:"Tự động", unread:true }));
-  TASKS.filter(t => t.status==="review").forEach(t => list.push({ type:"assign", title:`Chờ nghiệm thu: ${t.title}`, body:`${t.assignee} đã nộp kết quả`, time:"Tự động", unread:true }));
-  LEAVES.filter(l => l.status==="pending").forEach(l => list.push({ type:"leave", title:`Chờ duyệt nghỉ: ${l.who}`, body:`${l.type} · ${l.from}→${l.to}`, time:"Tự động", unread:false }));
-  list.push({ type:"info", title:"Bản tin buổi sáng đã sẵn sàng", body:"", time:"07:00", unread:false });
-  list.push({ type:"mood", title:"Mood check cuối ngày", body:"Trả lời trước 18:00 nhé.", time:"Hôm qua 17:00", unread:false });
+  TASKS.filter(isOverdue).forEach(t => list.push({ type:"late", title:`Quá hạn: ${t.title}`, body:`${t.assignee} · trễ ${Math.floor(daysBetween(t.due,NOW))} ngày`, link:`task-detail.html?id=${t.id}`, time:"Tự động", unread:true }));
+  TASKS.filter(t => t.status!=="done" && !isOverdue(t) && daysBetween(NOW,t.due) <= 1).forEach(t => list.push({ type:"soon", title:`Sắp đến hạn: ${t.title}`, body:`${t.assignee} · hạn ${fmtDue(t.due)}`, link:`task-detail.html?id=${t.id}`, time:"Tự động", unread:true }));
+  TASKS.filter(t => t.status==="review").forEach(t => list.push({ type:"assign", title:`Chờ nghiệm thu: ${t.title}`, body:`${t.assignee} đã nộp kết quả`, link:`task-detail.html?id=${t.id}`, time:"Tự động", unread:true }));
+  LEAVES.filter(l => l.status==="pending").forEach(l => list.push({ type:"leave", title:`Chờ duyệt nghỉ: ${l.who}`, body:`${l.type} · ${l.from}→${l.to}`, link:"leaves.html", time:"Tự động", unread:false }));
+  list.push({ type:"info", title:"Bản tin buổi sáng đã sẵn sàng", body:"", link:"reports.html", time:"07:00", unread:false });
+  list.push({ type:"mood", title:"Mood check cuối ngày", body:"Trả lời trước 18:00 nhé.", link:"mood-check.html", time:"Hôm qua 17:00", unread:false });
   return list;
 }
 const NDOT = { late:"bg-red-500", soon:"bg-amber-500", assign:"bg-indigo-500", info:"bg-slate-400", leave:"bg-emerald-500", mood:"bg-violet-500" };
 
+/* =====================================================================
+ *  SHELL
+ * ===================================================================== */
 let CHARTS = [];
 function clearCharts() { CHARTS.forEach(c => { try { c.destroy(); } catch(e){} }); CHARTS = []; }
-
-window.MENU_EXPANDED = window.MENU_EXPANDED || {
-  "Dashboard": true,
-  "Công việc": true,
-  "AI Assistant": true,
-  "Phê duyệt & Đánh giá": true,
-  "Báo cáo & Tự động hóa": true,
-  "Hồ sơ & Quản trị": true
-};
-window.toggleMenuSection = function(title) {
-  window.MENU_EXPANDED[title] = !window.MENU_EXPANDED[title];
-  const sectionContent = document.getElementById('menu-section-' + title);
-  const chevron = document.getElementById('menu-chevron-' + title);
-  if (sectionContent) {
-    if (window.MENU_EXPANDED[title]) {
-      sectionContent.classList.remove('hidden');
-      chevron.classList.remove('rotate-0');
-      chevron.classList.add('rotate-180');
-    } else {
-      sectionContent.classList.add('hidden');
-      chevron.classList.remove('rotate-180');
-      chevron.classList.add('rotate-0');
-    }
-  }
-};
-
 function renderShell(page, title, subtitle, actions = "") {
   clearCharts();
   CURRENT_PAGE = page;
+  const menu = IS_BOSS ? MENU_BOSS : MENU_STAFF;
   const unread = buildNotifs().filter(n => n.unread).length;
-  
-  const sections = [
-    {
-      title: "Dashboard",
-      icon: "fa-solid fa-gauge-high",
-      items: [
-        { label: "Dashboard team", href: "boss-dashboard.html", icon: "fa-solid fa-users-viewfinder", bossOnly: true },
-        { label: "Dashboard cá nhân", href: "dashboard.html", icon: "fa-solid fa-user-gear" }
-      ]
-    },
-    {
-      title: "Công việc",
-      icon: "fa-solid fa-list-check",
-      items: [
-        { label: "Công việc của tôi", href: "task-list.html", icon: "fa-solid fa-circle text-[6px] text-blue-600" },
-        { label: "Lịch công việc", href: "calendar.html", icon: "fa-solid fa-calendar-days" },
-        { label: "Dự án phối hợp", href: "collab.html", icon: "fa-solid fa-network-wired" }
-      ]
-    },
-    {
-      title: "AI Assistant",
-      icon: "fa-solid fa-wand-magic-sparkles",
-      items: [
-        { label: "AI Assistant & Phân tích", href: "ai-assistant.html", icon: "fa-solid fa-chart-simple" }
-      ]
-    },
-    {
-      title: "Phê duyệt & Đánh giá",
-      icon: "fa-solid fa-stamp",
-      items: [
-        { label: "Luồng phê duyệt", href: "leaves.html", icon: "fa-solid fa-file-signature" },
-        { label: IS_BOSS ? "Đánh giá nhân viên" : "Đánh giá của tôi", href: "work-dna.html", icon: "fa-solid fa-user-check" }
-      ]
-    },
-    {
-      title: "Báo cáo & Tự động hóa",
-      icon: "fa-solid fa-chart-line",
-      items: [
-        { label: "Báo cáo tự động", href: "reports.html", icon: "fa-solid fa-file-chart-column" },
-        { label: "FPT Drive", href: "resources.html", icon: "fa-solid fa-hard-drive" }
-      ]
-    },
-    {
-      title: "Hồ sơ & Quản trị",
-      icon: "fa-solid fa-user-gear",
-      items: [
-        { label: "Hồ sơ cá nhân", href: "profile.html", icon: "fa-solid fa-user-tie" },
-        { label: "Phân quyền & người dùng", href: "permissions.html", icon: "fa-solid fa-users-cog", bossOnly: true },
-        { label: "Quản trị hệ thống", href: "admin-settings.html", icon: "fa-solid fa-gears", bossOnly: true }
-      ]
-    }
-  ];
-
-  const sectionsHtml = sections.map(sec => {
-    const visibleItems = sec.items.filter(item => !item.bossOnly || IS_BOSS);
-    if (visibleItems.length === 0) return "";
-    
-    const isExpanded = window.MENU_EXPANDED[sec.title];
-    
-    const itemsHtml = visibleItems.map(item => {
-      const isActive = item.href === page;
-      let iconHtml = `<i class="${item.icon} mr-2.5 text-slate-400 text-[12px] w-4 text-center"></i>`;
-      if (isActive) {
-        iconHtml = `<i class="fa-solid fa-circle mr-2.5 text-[6px] text-blue-600 w-4 text-center"></i>`;
-      }
-      
-      return `
-        <a href="${item.href}" class="flex items-center px-3.5 py-2 rounded-lg text-[12.5px] transition ${isActive ? `bg-blue-50 text-blue-700 font-semibold` : "text-slate-600 hover:bg-slate-50"}" style="${isActive ? 'color: #065292; background-color: #EAF4FC;' : ''}">
-          ${iconHtml}
-          <span>${item.label}</span>
-        </a>
-      `;
-    }).join("");
-
-    return `
-      <div class="border-b border-slate-100/50 pb-1.5">
-        <button onclick="window.toggleMenuSection('${sec.title}')" class="w-full flex items-center justify-between px-3 py-2 text-slate-700 hover:bg-slate-50 rounded-lg text-[13px] font-bold transition">
-          <div class="flex items-center">
-            <i class="${sec.icon} mr-2.5 text-slate-500 w-4 text-center"></i>
-            <span>${sec.title}</span>
-          </div>
-          <i id="menu-chevron-${sec.title}" class="fa-solid fa-chevron-down text-[10px] text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : 'rotate-0'}"></i>
-        </button>
-        <div id="menu-section-${sec.title}" class="pl-2.5 pr-1 py-0.5 space-y-0.5 ${isExpanded ? '' : 'hidden'}">
-          ${itemsHtml}
-        </div>
-      </div>
-    `;
-  }).join("");
-
+  const scol = localStorage.getItem("pw_scol")==="1";
+  const GROUPS = navGroups();
   document.body.className = "bg-slate-50 text-slate-800 antialiased";
   document.body.innerHTML = `
   <div class="flex min-h-screen">
-    <aside class="w-[245px] shrink-0 bg-white border-r border-slate-200 flex flex-col sticky top-0 h-screen">
-      <div class="px-5 pt-5 pb-3 flex items-center gap-3">
-        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-white shrink-0" style="background: linear-gradient(135deg, #023E7D, #1E7ABF); box-shadow: 0 4px 10px rgba(0, 100, 177, 0.3)">
-          <i class="fa-solid fa-square-poll-horizontal text-[15px]"></i>
-        </span>
-        <span class="font-extrabold text-[18px] text-slate-800 tracking-tight">Pro<span class="text-[#065292]">Work</span></span>
+    <aside id="sidebar" class="pw-side ${scol?"scol":""} shrink-0 bg-white border-r border-slate-200 flex flex-col sticky top-0 h-screen">
+      <div class="px-4 pt-5 pb-3 flex items-center gap-2">
+        <span class="w-8 h-8 rounded-[10px] grid place-items-center shrink-0" style="background:linear-gradient(135deg,#023E7D,#1E7ABF);box-shadow:0 4px 10px rgba(0,100,177,.3)"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="white"><path d="M4 5h6v14H4zM12 5h8v6h-8z"/></svg></span>
+        <span class="logo-text font-extrabold text-slate-800 tracking-tight text-[16px]">Pro<span class="text-${AC}-600">Work</span></span>
       </div>
-      
-      <div class="mx-3 mb-3 p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-between cursor-pointer hover:bg-slate-100/80 transition" onclick="location.hash='#profile.html'">
-        <div class="flex items-center gap-2.5 min-w-0">
-          ${meAvatar("w-9 h-9 shrink-0")}
-          <div class="leading-tight min-w-0">
-            <div class="text-[13px] font-semibold text-slate-800 truncate">${ME.name}</div>
-            <div class="text-[11px] text-slate-400 truncate">${ME.title}</div>
-          </div>
-        </div>
-        <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 shrink-0 ml-1"></i>
+      <div class="mx-2.5 mb-2 p-2.5 rounded-xl bg-slate-50 flex items-center gap-2.5">
+        ${meAvatar("w-9 h-9 shrink-0")}
+        <div class="user-text leading-tight min-w-0 flex-1"><div class="text-[13px] font-semibold text-slate-800 truncate">${ME.name}</div><div class="text-[11px] text-slate-400 truncate">${ME.title}</div></div>
+        <a href="profile.html" class="user-text text-slate-300 hover:text-slate-500 shrink-0"><svg viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg></a>
       </div>
-
-      <nav class="px-2.5 flex-1 overflow-y-auto space-y-1 py-2">
-        ${sectionsHtml}
+      <nav class="px-2 flex-1 overflow-y-auto py-1 space-y-1">
+        ${GROUPS.map(grp=>`<details class="nav-group">
+          <summary class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-slate-50">
+            <span class="text-${AC}-600 shrink-0">${ic(grp.icon)}</span>
+            <span class="nav-text text-[12px] font-bold uppercase tracking-wide text-slate-500 flex-1">${grp.title}</span>
+            <svg class="nav-chev nav-text w-3.5 h-3.5 text-slate-400 transition-transform shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 15l6-6 6 6"/></svg>
+          </summary>
+          <div class="mt-0.5 mb-1 space-y-0.5">${grp.items.map(([href,lb,icn])=>{const act=href===page;return `<a href="${href}" class="nav-item flex items-center gap-2.5 pl-4 pr-2.5 py-2 rounded-lg text-[13px] ${act?`bg-${AC}-50 text-${AC}-700 font-semibold`:"text-slate-600 hover:bg-slate-50"}"><span class="${act?`text-${AC}-600`:"text-slate-400"} shrink-0">${ic(icn)}</span><span class="nav-text flex-1">${lb}</span>${href==="notifications.html"&&unread?`<span class="nav-text bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5">${unread}</span>`:""}</a>`;}).join("")}</div>
+        </details>`).join("")}
       </nav>
-
-      <div class="p-3 border-t border-slate-100 space-y-1.5 bg-white">
-        <button onclick="switchRole()" class="w-full text-[11px] font-semibold bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-lg py-1.5 text-slate-600 transition flex items-center justify-center gap-1.5">
-          <i class="fa-solid fa-user-astronaut text-[11px]"></i> ${IS_BOSS ? "Xem thử: Nhân viên" : "Xem thử: Sếp"}
-        </button>
-        <button onclick="alert('Tính năng thu gọn menu đang được phát triển (demo)')" class="w-full text-[11.5px] font-semibold border border-slate-200 rounded-lg py-2 text-slate-600 hover:bg-slate-50 flex items-center justify-center gap-1.5">
-          <i class="fa-solid fa-angles-left text-[11px]"></i> Thu gọn menu
-        </button>
-        <button onclick="logout()" class="w-full text-[12px] font-bold bg-red-50 text-red-600 border border-red-100 rounded-lg py-2.5 hover:bg-red-100/60 flex items-center justify-center gap-1.5 transition">
-          <i class="fa-solid fa-power-off text-[11px]"></i> Đăng xuất
-        </button>
+      <div class="m-2.5 space-y-2 border-t border-slate-100 pt-2.5">
+        <button onclick="toggleSidebar()" class="w-full text-[11.5px] font-semibold border border-slate-200 rounded-lg py-2 text-slate-600 hover:bg-slate-50 flex items-center justify-center gap-1.5"><span class="text-[13px] leading-none">«</span><span class="side-btn-text">Thu gọn menu</span></button>
+        <button onclick="switchRole()" class="w-full text-[11.5px] font-semibold border border-slate-200 rounded-lg py-2 text-slate-600 hover:bg-slate-50 flex items-center justify-center gap-1.5"><span class="leading-none">⇄</span><span class="side-btn-text">${IS_BOSS?"Xem thử: Nhân viên":"Xem thử: Sếp"}</span></button>
+        <button onclick="logout()" class="w-full text-[11.5px] font-semibold border border-red-200 text-red-600 rounded-lg py-2 hover:bg-red-50 flex items-center justify-center gap-1.5"><span class="leading-none">⎋</span><span class="side-btn-text">Đăng xuất</span></button>
       </div>
     </aside>
     <div class="flex-1 min-w-0">
@@ -599,8 +502,8 @@ function renderShell(page, title, subtitle, actions = "") {
         <div class="ml-auto hidden lg:block"><input placeholder="Tìm kiếm task, dự án, nhân sự…" class="w-60 text-[12.5px] border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-${AC}-200"></div>
         <button onclick="openTaskModal()" class="bg-${AC}-600 text-white text-[12.5px] font-semibold px-3.5 py-2 rounded-lg shrink-0">Tạo task</button>
         ${actions}
-        <button onclick="location.hash='#notifications.html'" title="Thông báo" class="relative shrink-0 w-9 h-9 grid place-items-center rounded-lg border border-slate-200 text-slate-500 hover:bg-${AC}-50 hover:text-${AC}-600 hover:border-${AC}-200 text-[16px] leading-none">🔔${unread?`<span class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5">${unread}</span>`:""}</button>
         <button onclick="toggleChat()" class="text-[12.5px] font-semibold text-white bg-${AC}-600 hover:bg-${AC}-700 rounded-lg px-3.5 py-2 shrink-0 shadow-sm flex items-center gap-1.5">Tin nhắn <span class="bg-white text-${AC}-700 rounded-full px-1.5 text-[11px] font-bold">7</span></button>
+        <button onclick="location.hash='#notifications.html'" title="Thông báo" class="relative shrink-0 w-9 h-9 grid place-items-center rounded-lg border border-slate-200 text-slate-500 hover:bg-${AC}-50 hover:text-${AC}-600 hover:border-${AC}-200 text-[16px] leading-none">🔔${unread?`<span class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold rounded-full px-1 min-w-[16px] text-center leading-[16px]">${unread}</span>`:""}</button>
       </header>
       <main class="p-6 w-full max-w-[1340px]">${
         ["resources.html","collab-detail.html","collab-new.html","ai-assistant.html"].includes(page)
@@ -629,7 +532,7 @@ function tabBtnCls(active){ return `rounded-lg border px-3 py-2 text-left ${acti
 function taskModalHTML() {
   return `<div id="taskModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)closeTaskModal()">
     <div class="bg-white rounded-2xl w-full max-w-3xl max-h-[92vh] overflow-y-auto shadow-2xl">
-      <div class="px-6 pt-5 pb-3 border-b border-slate-100 sticky top-0 bg-white z-10"><h2 class="font-extrabold text-[17px] tracking-tight text-slate-900">Tạo công việc mới</h2><p class="text-[12px] text-slate-400 mt-0.5">Điền thông tin công việc — loại task tự xác định theo Người nhận / Người phê duyệt</p></div>
+      <div class="px-6 pt-5 pb-3 border-b border-slate-100 sticky top-0 bg-white z-10 flex items-start gap-2"><div class="flex-1"><h2 class="font-extrabold text-[17px] tracking-tight text-slate-900">Tạo công việc mới</h2><p class="text-[12px] text-slate-400 mt-0.5">Điền thông tin công việc — loại task tự xác định theo Người nhận / Người phê duyệt</p></div><button onclick="closeTaskModal()" title="Đóng" class="text-slate-400 text-2xl leading-none xclose">×</button></div>
       <div class="p-6">
       <div class="text-[11.5px] text-slate-500 bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 mb-4">💡 Để trống <b>Người nhận</b> & <b>Người phê duyệt</b> → <b>Task cá nhân</b>. Chọn <b>Người nhận</b> → <b>Giao task</b>. Chọn <b>Người phê duyệt</b> → thêm bước <b>duyệt & nghiệm thu</b>.</div>
       <div id="tmParentNote" class="hidden text-[12px] bg-${AC}-50 border border-${AC}-200 text-${AC}-700 rounded-lg px-3 py-2 mb-3"></div>
@@ -712,41 +615,189 @@ function openSpawnModal(aId){
   const note=document.getElementById("tmParentNote"); if(note){ note.classList.remove("hidden"); note.innerHTML=`🔗 Đây là <b>task con</b> của: <b>${a.title}</b> — sẽ tự liên kết với task cha khi tạo.`; }
 }
 
-/* ---------- CHAT ---------- */
-const CHAT_CONTACTS = [{name:"Linh Trần",last:"Em gửi bản SEO rồi nhé anh",unread:2,online:true},{name:"Nam Phạm",last:"Ngân sách Ads ổn chưa sếp?",unread:0,online:true},{name:"Nhóm ADS",last:"Huy: banner xong tối nay",unread:5,group:true},{name:"Nhóm SEO",last:"Ánh: top 5 từ khóa rồi",unread:0,group:true},{name:"Ánh Dương",last:"Audit xong em báo lại",unread:0}];
-function chatWidgetHTML() {
-  return `<div id="chatPanel" class="hidden fixed top-16 right-5 z-50 w-[680px] max-w-[94vw] h-[460px] bg-white border border-slate-200 rounded-2xl shadow-2xl flex overflow-hidden">
-    <div class="w-[210px] border-r border-slate-200 flex flex-col"><div class="px-3 py-3 border-b border-slate-100 flex items-center"><b class="text-[13px]">Đoạn chat</b><button onclick="toggleChat()" class="ml-auto text-slate-400 text-lg leading-none">×</button></div><div id="chatList" class="flex-1 overflow-y-auto"></div></div>
-    <div class="flex-1 flex flex-col"><div id="chatHead" class="px-4 py-3 border-b border-slate-100 font-semibold text-[13px]"></div><div id="chatBody" class="flex-1 overflow-y-auto p-3 space-y-2 bg-slate-50"></div>
-      <div class="p-2.5 border-t border-slate-100 flex gap-2"><button onclick="chatAssign()" title="Giao việc trong hội thoại" class="border border-${AC}-300 text-${AC}-700 rounded-full px-3 h-9 text-[11px] font-semibold shrink-0 hover:bg-${AC}-50">＋ Giao task</button><input id="chatInput" onkeydown="if(event.key==='Enter')chatSend()" class="flex-1 border border-slate-200 rounded-full px-3.5 py-2 text-[12.5px] focus:outline-none" placeholder="Nhập tin nhắn…"><button onclick="chatSend()" class="bg-${AC}-600 text-white px-4 h-9 rounded-full text-[11px]">Gửi</button></div></div>
+/* ---------- TIN NHẮN & PHỐI HỢP CÔNG VIỆC ---------- */
+let CHATS = [
+  {id:1,type:"dm",name:"Linh Trần",color:"emerald",muted:false,msgs:[{id:11,from:"Linh Trần",text:"Em gửi anh bản SEO Hà Nam v2 nhé",ts:"09:10"},{id:12,from:"__me__",text:"Ok em, để anh xem",ts:"09:12"}]},
+  {id:2,type:"dm",name:"Nam Phạm",color:"orange",muted:false,msgs:[{id:21,from:"Nam Phạm",text:"Ngân sách Ads tháng 6 em đề xuất 15tr",ts:"08:40"},{id:22,from:"__me__",text:"Gửi đơn lên Luồng phê duyệt nhé",ts:"08:42"}]},
+  {id:3,type:"group",name:"Nhóm ADS",color:"orange",desc:"Trao đổi chiến dịch quảng cáo",muted:false,members:["Nguyễn Văn Nam","Nam Phạm","Huy Lê"],admins:["Nguyễn Văn Nam"],perms:{add:"admin",poll:"all",meeting:"all"},msgs:[{id:31,from:"Huy Lê",text:"Banner Bắc Giang xong tối nay nhé cả nhà",ts:"10:02"},{id:32,from:"__me__",text:"Cả nhóm cố gắng nhé @All",ts:"10:05"}]},
+  {id:4,type:"group",name:"Nhóm SEO",color:"violet",desc:"Tối ưu từ khóa & nội dung",muted:false,members:["Nguyễn Văn Nam","Linh Trần","Ánh Dương"],admins:["Linh Trần"],perms:{add:"all",poll:"all",meeting:"all"},msgs:[{id:41,from:"Ánh Dương",text:"Đã lên top 5 từ khóa tuyển sinh Bắc Ninh",ts:"11:20"}]},
+];
+let chatActive=0, chatReplyTo=null, chatSearchOn=false, MID=100, GS_TAB="info";
+const cColors={emerald:"bg-emerald-600",orange:"bg-orange-500",violet:"bg-violet-600",slate:"bg-slate-500"};
+function curChat(){ return CHATS[chatActive]; }
+function isAdmin(c){ return c.type==="group" && (c.admins||[]).includes(ME.name); }
+function nowHM(){ const d=new Date(); return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0"); }
+function chatAvatar(c,sz){ sz=sz||"w-8 h-8"; if(c.type==="group") return `<span class="${sz} rounded-xl grid place-items-center text-white text-[11px] font-bold ${cColors[c.color]||"bg-slate-500"} shrink-0">${c.name.replace("Nhóm ","").slice(0,2)}</span>`; return avatar(c.name); }
+function msgLast(c){ const m=[...c.msgs].reverse().find(x=>!x.recalled&&x.kind!=="system"); if(!m)return ""; const who=m.from==="__me__"?"Bạn: ":(c.type==="group"?m.from.split(" ").pop()+": ":""); if(m.kind==="image")return who+"📷 Hình ảnh"; if(m.kind==="file")return who+"📎 "+(m.file&&m.file.name||"File"); if(m.kind==="poll")return who+"📊 "+m.poll.q; if(m.kind==="meeting")return who+"📅 "+m.meeting.title; return who+(m.text||"").replace(/<[^>]+>/g,""); }
+function toggleChat(){ const p=document.getElementById("chatPanel"); if(!p)return; const ap=document.getElementById("aiPanel"); if(ap&&!ap.classList.contains("hidden"))toggleAIW(); p.classList.toggle("hidden"); if(!p.classList.contains("hidden")) mountChat(); }
+function chatWidgetHTML(){
+  return `<div id="chatPanel" class="hidden fixed top-14 right-4 z-50 w-[880px] max-w-[96vw] h-[582px] max-h-[88vh] bg-white border border-slate-200 rounded-2xl shadow-2xl flex overflow-hidden">
+    <div class="w-[238px] border-r border-slate-200 flex flex-col">
+      <div class="px-3 py-3 border-b border-slate-100 flex items-center gap-1.5"><b class="text-[13.5px] flex-1">Tin nhắn</b><button onclick="openCreateGroup()" title="Tạo nhóm mới" class="w-8 h-8 grid place-items-center rounded-lg border border-slate-200 text-${AC}-600 hover:bg-${AC}-50 hover:border-${AC}-300 text-${AC}-600">${ic('plus')}</button></div>
+      <div class="px-2.5 py-2"><input id="convSearch" oninput="mountChat()" class="w-full bg-slate-100 rounded-lg px-3 py-1.5 text-[12px] focus:outline-none" placeholder="🔍 Tìm cuộc trò chuyện…"></div>
+      <div id="chatList" class="flex-1 overflow-y-auto"></div>
+    </div>
+    <div class="flex-1 flex flex-col min-w-0">
+      <div id="chatHead" class="px-4 py-2.5 border-b border-slate-100 flex items-center gap-2 min-h-[58px]"></div>
+      <div id="chatSearchBar" class="hidden px-3 py-2 border-b border-slate-100 bg-slate-50"><input id="msgSearch" oninput="renderMsgs()" class="w-full bg-white border border-slate-200 rounded-lg px-3 py-1.5 text-[12px] focus:outline-none" placeholder="🔍 Tìm trong hội thoại: nội dung, người gửi, file, ảnh…"></div>
+      <div id="chatBody" class="flex-1 overflow-y-auto p-3 space-y-1 bg-slate-50 transition" ondragover="event.preventDefault();this.classList.add('ring-2','ring-${AC}-300')" ondragleave="this.classList.remove('ring-2','ring-${AC}-300')" ondrop="chatDrop(event)"></div>
+      <div id="chatReply" class="hidden px-3 py-1.5 border-t border-slate-100 bg-amber-50 text-[11.5px] flex items-center gap-2"></div>
+      <div id="chatComposer" class="border-t border-slate-100"></div>
+    </div>
   </div>`;
 }
-let chatActive = 0;
-function toggleChat(){ const p=document.getElementById("chatPanel"); if(!p)return; const ap=document.getElementById("aiPanel"); if(ap&&!ap.classList.contains("hidden"))toggleAIW(); p.classList.toggle("hidden"); }
-function mountChat(){ const list=document.getElementById("chatList"); if(!list)return; list.innerHTML=CHAT_CONTACTS.map((c,i)=>`<div onclick="chatOpen(${i})" class="px-3 py-2.5 flex items-center gap-2.5 cursor-pointer ${i===chatActive?`bg-${AC}-50`:"hover:bg-slate-50"}"><span class="w-8 h-8 rounded-full grid place-items-center text-white text-[11px] font-bold ${c.group?"bg-slate-500":"bg-"+AC+"-600"}">${c.name.split(" ").pop()[0]}</span><div class="min-w-0 flex-1"><div class="text-[12.5px] font-semibold truncate">${c.name}</div><div class="text-[11px] text-slate-400 truncate">${c.last}</div></div>${c.unread?`<span class="bg-red-500 text-white text-[10px] font-bold rounded-full px-1.5">${c.unread}</span>`:""}</div>`).join(""); chatOpen(chatActive); }
-const CHAT_THREADS={0:[["them","Em gửi anh bản SEO Hà Nam v2 nhé"],["me","Ok em, để anh xem"]],1:[["them","Ngân sách Ads tháng 6 em đề xuất 15tr"],["me","Gửi đơn lên Luồng phê duyệt nhé"]],2:[["them","Huy: banner xong tối nay"],["me","Cả nhóm cố gắng nhé"]],3:[["them","Ánh: đã lên top 5 từ khóa"],["me","Tốt lắm"]],4:[["them","Audit Ads xong em báo lại sếp"]]};
-function chatOpen(i){ chatActive=i; const c=CHAT_CONTACTS[i]; document.getElementById("chatHead").textContent=c.name+(c.online?" · đang hoạt động":""); document.getElementById("chatBody").innerHTML=(CHAT_THREADS[i]||[]).map(([s,t])=>`<div class="max-w-[78%] ${s==="me"?`ml-auto bg-${AC}-600 text-white`:"bg-white border border-slate-200"} rounded-2xl px-3 py-2 text-[12.5px]">${t}</div>`).join(""); [...document.getElementById("chatList").children].forEach((el,j)=>el.className=`px-3 py-2.5 flex items-center gap-2.5 cursor-pointer ${j===chatActive?`bg-${AC}-50`:"hover:bg-slate-50"}`); }
-function chatSend(){ const inp=document.getElementById("chatInput"),v=inp.value.trim(); if(!v)return; (CHAT_THREADS[chatActive]=CHAT_THREADS[chatActive]||[]).push(["me",v]); inp.value=""; chatOpen(chatActive); const b=document.getElementById("chatBody"); b.scrollTop=b.scrollHeight; }
-function chatAssign(){
-  if(document.getElementById("chatAssignForm")) return;
-  const c=CHAT_CONTACTS[chatActive]; const body=document.getElementById("chatBody");
-  body.insertAdjacentHTML("beforeend",`<div id="chatAssignForm" class="bg-white border border-${AC}-200 rounded-xl p-2.5 text-[12px] shadow-sm">
-    <div class="font-semibold text-${AC}-700 mb-1.5">Giao việc cho ${c.name}</div>
-    <input id="caTitle" class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 mb-1.5" placeholder="Tên công việc (vd: Viết bài SEO Hà Nam)">
-    <div class="flex gap-1.5"><select id="caProj" class="border border-slate-200 rounded-lg px-2 py-1.5 text-[11.5px] bg-white flex-1">${SPECIALTIES.map(s=>`<option>${s}</option>`).join("")}</select><input id="caDue" type="date" value="2026-06-12" class="border border-slate-200 rounded-lg px-2 py-1.5"><button onclick="chatAssignSend()" class="bg-${AC}-600 text-white rounded-lg px-3 font-semibold">Giao</button></div>
-  </div>`);
+function mountChat(){ const list=document.getElementById("chatList"); if(!list)return;
+  const q=((document.getElementById("convSearch")||{}).value||"").toLowerCase();
+  const items=CHATS.map((c,i)=>({c,i})).filter(o=>!q||o.c.name.toLowerCase().includes(q)||msgLast(o.c).toLowerCase().includes(q));
+  list.innerHTML=items.map(o=>`<div onclick="chatOpen(${o.i})" class="px-3 py-2.5 flex items-center gap-2.5 cursor-pointer ${o.i===chatActive?`bg-${AC}-50`:"hover:bg-slate-50"}">${chatAvatar(o.c)}<div class="min-w-0 flex-1"><div class="text-[12.5px] font-semibold truncate flex items-center gap-1">${o.c.name}${o.c.type==="group"?`<span class="text-[9px] text-slate-400 font-normal">· ${o.c.members.length}</span>`:""}</div><div class="text-[11px] text-slate-400 truncate">${msgLast(o.c)}</div></div>${o.c.muted?`<span class="text-slate-300 text-[11px]">🔕</span>`:""}</div>`).join("")||`<div class="p-4 text-center text-slate-400 text-[12px]">Không tìm thấy.</div>`;
+  chatOpen(chatActive);
+}
+function chatOpen(i){ if(i<0||i>=CHATS.length)i=0; chatActive=i; chatReplyTo=null; chatSearchOn=false; const sb=document.getElementById("chatSearchBar"); if(sb)sb.classList.add("hidden"); const r=document.getElementById("chatReply"); if(r){r.classList.add("hidden");r.innerHTML="";} renderHead(); renderMsgs(); renderComposer(); }
+function renderHead(){ const c=curChat(); const h=document.getElementById("chatHead"); if(!h)return;
+  h.innerHTML=`${chatAvatar(c,"w-9 h-9")}<div class="min-w-0 flex-1"><div class="text-[13.5px] font-bold truncate">${c.name}</div><div class="text-[11px] text-slate-400 truncate">${c.type==="group"?`${c.members.length} thành viên`:"đang hoạt động"}</div></div><button onclick="openChatSummary()" title="AI tóm tắt hội thoại" class="w-9 h-9 grid place-items-center rounded-lg hover:bg-slate-100 text-violet-600">${ic('spark')}</button><button onclick="toggleMsgSearch()" title="Tìm trong hội thoại" class="w-9 h-9 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-500">${ic('search')}</button>${c.type==="group"?`<button onclick="openThreadList()" title="Chủ đề / Luồng" class="w-9 h-9 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-500">${ic('thread')}</button><button onclick="openAddMember()" title="Thêm thành viên" class="w-9 h-9 grid place-items-center rounded-lg border border-slate-200 hover:bg-${AC}-50 hover:border-${AC}-300 text-${AC}-600">${ic('userplus')}</button>`:""}<button onclick="openConvSettings()" title="Cài đặt hội thoại" class="w-9 h-9 grid place-items-center rounded-lg border border-slate-200 hover:bg-slate-100 text-slate-500">${ic('gear')}</button><button onclick="toggleChat()" title="Đóng tin nhắn" class="w-9 h-9 grid place-items-center rounded-lg text-slate-400 hover:bg-red-50 hover:text-red-600 text-2xl leading-none xclose ml-0.5">×</button>`;
+}
+function toggleMsgSearch(){ const sb=document.getElementById("chatSearchBar"); if(!sb)return; chatSearchOn=!chatSearchOn; sb.classList.toggle("hidden",!chatSearchOn); const i=document.getElementById("msgSearch"); if(chatSearchOn){ if(i)i.focus(); } else { if(i)i.value=""; renderMsgs(); } }
+function fmtTag(t){ return (t||"").replace(/@([A-Za-zÀ-ỹ]+( [A-Za-zÀ-ỹ]+)?|All)/g,'<span class="text-'+AC+'-600 font-semibold bg-'+AC+'-50 rounded px-1">@$1</span>'); }
+function renderMsgs(){ const c=curChat(); const body=document.getElementById("chatBody"); if(!body)return;
+  const q=((document.getElementById("msgSearch")||{}).value||"").toLowerCase();
+  let list=c.msgs; if(q) list=list.filter(m=>(((m.text||"")+" "+m.from+" "+((m.file||{}).name||"")+" "+((m.poll||{}).q||"")+" "+((m.meeting||{}).title||"")).toLowerCase().includes(q)));
+  body.innerHTML=list.map(m=>msgHTML(m,c)).join("")||`<div class="text-center text-slate-300 text-[12px] py-6">Không có tin nhắn khớp.</div>`;
   body.scrollTop=body.scrollHeight;
 }
-function chatAssignSend(){
-  const ti=(document.getElementById("caTitle").value||"").trim(); if(!ti) return alert("Nhập tên công việc trước khi giao.");
-  const proj=document.getElementById("caProj").value; const due=document.getElementById("caDue").value;
-  const c=CHAT_CONTACTS[chatActive];
-  const f=document.getElementById("chatAssignForm"); if(f)f.remove();
-  (CHAT_THREADS[chatActive]=CHAT_THREADS[chatActive]||[]).push(["me",`📋 Đã giao việc: <b>${ti}</b> · ${proj}${due?` · hạn ${due.split("-").reverse().join("/")}`:""}`]);
-  CHAT_THREADS[chatActive].push(["them", c.group?"Nhóm đã nhận việc, sẽ phân công nhé!":"Ok, em nhận việc nhé!"]);
-  chatOpen(chatActive);
-  const b=document.getElementById("chatBody"); b.scrollTop=b.scrollHeight;
+function msgHTML(m,c){ const mine=m.from==="__me__";
+  if(m.kind==="system") return `<div class="text-center text-[11px] text-slate-400 py-1.5">${m.text}</div>`;
+  if(m.recalled) return `<div class="flex ${mine?"justify-end":""}"><div class="italic text-slate-400 text-[12px] px-3 py-1.5 border border-dashed border-slate-200 rounded-2xl">Tin nhắn đã được thu hồi</div></div>`;
+  const reacts=m.reacts&&Object.keys(m.reacts).length?`<div class="flex gap-1 mt-0.5 ${mine?"justify-end":""}">${Object.entries(m.reacts).map(kv=>`<span class="bg-white border border-slate-200 rounded-full px-1.5 text-[11px]">${kv[0]} ${kv[1]}</span>`).join("")}</div>`:"";
+  const card=(m.kind==="poll"||m.kind==="meeting");
+  let inner="";
+  if(m.kind==="image") inner=`<div class="rounded-xl overflow-hidden w-44 h-28 grid place-items-center text-white text-3xl" style="background:linear-gradient(135deg,#1E7ABF,#7C3AED)">🖼️</div><div class="text-[10px] ${mine?"text-white/70":"text-slate-400"} mt-0.5">${m.img||"anh.png"}</div>`;
+  else if(m.kind==="file") inner=`<div class="flex items-center gap-2"><span class="text-2xl">📄</span><div class="min-w-0"><div class="font-semibold text-[12px] truncate">${m.file.name}</div><div class="text-[10.5px] ${mine?"text-white/70":"text-slate-400"}">${m.file.size} · ${mine?"Bạn":m.from} · ${m.ts}</div></div><button onclick="alert('Tải xuống ${m.file.name} (demo)')" class="ml-1 text-[11px] font-semibold ${mine?"text-white underline":'text-'+AC+'-600'}">Tải</button></div>`;
+  else if(m.kind==="poll") inner=pollHTML(m,c);
+  else if(m.kind==="meeting") inner=meetHTML(m);
+  else inner=`<div>${fmtTag(m.text)}</div>${m.edited?`<span class="text-[9.5px] ${mine?"text-white/60":"text-slate-400"}">(đã sửa)</span>`:""}`;
+  const reply=m.reply?`<div class="text-[10.5px] ${mine?"bg-white/15 text-white/80":"bg-slate-100 text-slate-500"} rounded-lg px-2 py-1 mb-1 truncate">↩ ${m.reply}</div>`:"";
+  const sender=(!mine&&c.type==="group")?`<div class="text-[10.5px] font-semibold text-${AC}-600 mb-0.5">${m.from}</div>`:"";
+  const bubble=card?"bg-white border border-slate-200 text-slate-700":(mine?`bg-${AC}-600 text-white`:"bg-white border border-slate-200");
+  const timeCls=(mine&&!card)?"text-white/60":"text-slate-400";
+  const threadChip=(m.thread&&m.thread.length)?`<button onclick="openThread(${m.id})" class="text-[10.5px] text-${AC}-600 font-semibold mt-0.5 ${mine?"block ml-auto":""}">🧵 ${m.thread.length} trả lời trong luồng</button>`:"";
+  const taskSuggest=((!m.kind||m.kind==="text")&&!m.recalled&&isTaskLike(m.text))?`<div class="${mine?"text-right":""} mt-0.5"><button onclick="msgToTask(${m.id})" class="text-[10.5px] font-semibold text-violet-600 bg-violet-50 border border-violet-100 rounded-full px-2 py-0.5 hover:bg-violet-100">✨ Tạo task từ tin nhắn</button></div>`:"";
+  const actions=`<div class="msg-act hidden group-hover:flex items-center gap-1 ${mine?"order-first mr-1":"ml-1"}"><button onclick="setReply(${m.id})" title="Trả lời" class="w-6 h-6 grid place-items-center rounded bg-white border border-slate-200 text-slate-500">${ic('reply','w-3.5 h-3.5')}</button><button onclick="reactPick(${m.id})" title="Cảm xúc" class="w-6 h-6 grid place-items-center rounded bg-white border border-slate-200 text-slate-500">${ic('smile','w-3.5 h-3.5')}</button><button onclick="openThread(${m.id})" title="Trả lời theo luồng" class="w-6 h-6 grid place-items-center rounded bg-white border border-slate-200 text-slate-500">${ic('thread','w-3.5 h-3.5')}</button>${mine&&m.kind==="text"?`<button onclick="editMsg(${m.id})" title="Sửa" class="w-6 h-6 grid place-items-center rounded bg-white border border-slate-200 text-slate-500">${ic('edit','w-3.5 h-3.5')}</button>`:""}${mine?`<button onclick="recallMsg(${m.id})" title="Thu hồi" class="w-6 h-6 grid place-items-center rounded bg-white border border-slate-200 text-red-500">${ic('trash','w-3.5 h-3.5')}</button>`:""}</div>`;
+  return `<div class="group flex items-center ${mine?"justify-end":"justify-start"}"><div class="max-w-[80%]">${sender}<div class="rounded-2xl px-3 py-2 text-[12.5px] ${bubble}">${reply}${inner}<div class="text-[9.5px] ${timeCls} mt-0.5 ${mine?"text-right":""}">${m.ts||""}</div></div>${reacts}${threadChip}${taskSuggest}</div>${actions}</div>`;
 }
+function pollHTML(m,c){ const p=m.poll; const total=p.opts.reduce((a,o)=>a+o.votes.length,0); const admin=isAdmin(c);
+  return `<div class="w-56"><div class="font-bold text-[12.5px] mb-1.5">📊 ${p.q}</div>${p.opts.map((o,idx)=>{const pct=total?Math.round(o.votes.length/total*100):0; const voted=o.votes.includes(ME.name); return `<button ${p.locked?"disabled":""} onclick="votePoll(${m.id},${idx})" class="w-full text-left mb-1.5 relative border ${voted?`border-${AC}-400`:"border-slate-200"} rounded-lg px-2 py-1.5 text-[11.5px] overflow-hidden block"><div class="absolute inset-0 bg-${AC}-50" style="width:${pct}%"></div><div class="relative flex items-center justify-between"><span>${voted?"●":"○"} ${o.t}</span><span class="text-slate-500">${pct}%</span></div></button>`;}).join("")}<div class="text-[10px] text-slate-400">${total} lượt vote${p.locked?" · đã khóa":""}</div>${admin?`<div class="flex gap-3 mt-1">${total?`<button onclick="pollWho(${m.id})" class="text-[10.5px] text-${AC}-600 font-semibold">Ai đã vote</button>`:""}<button onclick="lockPoll(${m.id})" class="text-[10.5px] text-slate-500 font-semibold">${p.locked?"Mở vote":"Khóa vote"}</button></div>`:""}</div>`;
+}
+function meetHTML(m){ const t=m.meeting; const r=t.rsvp||{};
+  return `<div class="w-56"><div class="font-bold text-[12.5px] mb-0.5">📅 ${t.title}</div><div class="text-[11.5px] text-slate-500">${t.time} · ${t.date}</div><div class="flex gap-1.5 mt-2">${[["yes","Tham gia","emerald"],["no","Từ chối","red"],["maybe","Có thể","amber"]].map(o=>`<button onclick="meetRsvp(${m.id},'${o[0]}')" class="flex-1 text-[10.5px] font-semibold rounded-lg py-1 border ${r[ME.name]===o[0]?`bg-${o[2]}-100 text-${o[2]}-700 border-${o[2]}-300`:"border-slate-200 text-slate-500"}">${o[1]}</button>`).join("")}</div><div class="text-[10px] text-slate-400 mt-1">${Object.values(r).filter(x=>x==="yes").length} tham gia</div></div>`;
+}
+function renderComposer(){ const c=curChat(); const el=document.getElementById("chatComposer"); if(!el)return;
+  const canPoll=c.type==="dm"||(c.perms&&c.perms.poll==="all")||isAdmin(c);
+  const canMeet=c.type==="dm"||(c.perms&&c.perms.meeting==="all")||isAdmin(c);
+  el.innerHTML=`<div class="flex items-center gap-1 px-2.5 pt-2"><button onclick="toggleEmoji()" title="Emoji" class="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-600">${ic('smile')}</button><button onclick="addImage()" title="Gửi ảnh" class="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-600">${ic('image')}</button><button onclick="addFile()" title="Gửi file" class="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-600">${ic('clip2')}</button>${c.type==="group"?`<button onclick="toggleMention()" title="Nhắc tên (@)" class="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100 text-${AC}-600">${ic('at')}</button>`:""}${canPoll?`<button onclick="openPollModal()" title="Tạo bình chọn" class="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-600">${ic('chart')}</button>`:""}${canMeet?`<button onclick="openMeetModalChat()" title="Tạo lịch hẹn" class="w-8 h-8 grid place-items-center rounded-lg hover:bg-slate-100 text-slate-600">${ic('cal')}</button>`:""}<button onclick="chatAssign()" title="Giao task trong hội thoại" class="ml-auto text-[11px] font-semibold border border-${AC}-300 text-${AC}-700 rounded-full px-2.5 h-7 hover:bg-${AC}-50">＋ Giao task</button></div>
+  <div id="emojiBar" class="hidden flex flex-wrap gap-1 px-2.5 py-1">${"😀 😄 😁 😂 🥰 😍 😎 😉 🙂 😢 😡 👍 ❤️ 🔥 🎉 ✅ 🙏 👏".split(" ").map(e=>`<button onclick="insertEmoji('${e}')" class="text-lg hover:scale-110 transition">${e}</button>`).join("")}</div>
+  <div id="mentionBar" class="hidden flex flex-wrap gap-1 px-2.5 py-1">${(c.members||[]).filter(n=>n!==ME.name).map(n=>`<button onclick="insertMention('${n}')" class="text-[11px] bg-slate-100 hover:bg-slate-200 rounded-full px-2 py-0.5">@${n.split(" ").pop()}</button>`).join("")}${c.type==="group"?`<button onclick="insertMention('All')" class="text-[11px] bg-${AC}-100 text-${AC}-700 rounded-full px-2 py-0.5">@All</button>`:""}</div>
+  <div class="p-2.5 flex gap-2"><input id="chatInput" onkeydown="if(event.key==='Enter')chatSend()" onpaste="chatPaste(event)" class="flex-1 border border-slate-200 rounded-full px-3.5 py-2 text-[12.5px] focus:outline-none" placeholder="Nhập tin nhắn…  (Ctrl+V để dán ảnh)"><button onclick="chatSend()" class="bg-${AC}-600 text-white px-4 h-9 rounded-full text-[11px] font-semibold">Gửi</button></div>`;
+}
+function pushMsg(m){ const c=curChat(); m.id=++MID; if(!m.ts)m.ts=nowHM(); c.msgs.push(m); renderMsgs(); }
+function chatSend(){ const inp=document.getElementById("chatInput"); if(!inp)return; const v=inp.value.trim(); if(!v)return; pushMsg({from:"__me__",text:v,reply:chatReplyTo}); inp.value=""; clearReply(); }
+function setReply(id){ const m=curChat().msgs.find(x=>x.id===id); if(!m)return; const snip=(m.from==="__me__"?"Bạn":m.from)+": "+(m.text?m.text.replace(/<[^>]+>/g,""):(m.kind==="image"?"Hình ảnh":m.kind==="file"?m.file.name:m.kind==="poll"?m.poll.q:m.kind==="meeting"?m.meeting.title:"")); chatReplyTo=snip; const r=document.getElementById("chatReply"); r.classList.remove("hidden"); r.innerHTML=`<span class="flex-1 truncate">↩ ${snip}</span><button onclick="clearReply()" class="text-slate-400 text-base leading-none">×</button>`; const i=document.getElementById("chatInput"); if(i)i.focus(); }
+function clearReply(){ chatReplyTo=null; const r=document.getElementById("chatReply"); if(r){r.classList.add("hidden");r.innerHTML="";} }
+function toggleEmoji(){ const e=document.getElementById("emojiBar"); if(e)e.classList.toggle("hidden"); }
+function insertEmoji(e){ const i=document.getElementById("chatInput"); if(i){i.value+=e; i.focus();} }
+function toggleMention(){ const e=document.getElementById("mentionBar"); if(e)e.classList.toggle("hidden"); }
+function insertMention(n){ const i=document.getElementById("chatInput"); if(i){ i.value+=(i.value&&!i.value.endsWith(" ")?" ":"")+"@"+n+" "; i.focus(); } }
+function pickFiles(accept,cb){ const inp=document.createElement("input"); inp.type="file"; inp.multiple=true; if(accept)inp.accept=accept; inp.onchange=()=>cb([...inp.files]); inp.click(); }
+function addImage(){ pickFiles("image/*",fs=>{ if(!fs.length){ pushMsg({from:"__me__",kind:"image",img:"anh.png"}); return; } fs.forEach(f=>pushMsg({from:"__me__",kind:"image",img:f.name})); }); }
+function addFile(){ pickFiles("",fs=>{ if(!fs.length)return; fs.forEach(f=>pushMsg({from:"__me__",kind:"file",file:{name:f.name,size:Math.max(1,Math.round((f.size||100000)/1024))+" KB"}})); }); }
+function chatPaste(e){ const items=(e.clipboardData||{}).items||[]; for(const it of items){ if(it.type&&it.type.indexOf("image")===0){ e.preventDefault(); pushMsg({from:"__me__",kind:"image",img:"anh_dan.png"}); return; } } }
+function chatDrop(e){ e.preventDefault(); const b=document.getElementById("chatBody"); if(b)b.classList.remove("ring-2","ring-"+AC+"-300"); const fs=(e.dataTransfer&&e.dataTransfer.files)||[]; if(fs.length){ for(const f of fs){ const isImg=(f.type||"").indexOf("image")===0; pushMsg(isImg?{from:"__me__",kind:"image",img:f.name}:{from:"__me__",kind:"file",file:{name:f.name,size:Math.max(1,Math.round((f.size||100000)/1024))+" KB"}}); } } else { pushMsg({from:"__me__",kind:"image",img:"keo_tha.png"}); } }
+function reactPick(id){ const m=curChat().msgs.find(x=>x.id===id); if(!m)return; const e=prompt("Thả cảm xúc (👍 ❤️ 😂 😮 😢 🙏):","👍"); if(!e)return; m.reacts=m.reacts||{}; m.reacts[e]=(m.reacts[e]||0)+1; renderMsgs(); }
+function editMsg(id){ const m=curChat().msgs.find(x=>x.id===id); if(!m||m.from!=="__me__")return; const v=prompt("Sửa tin nhắn:",m.text); if(v==null)return; m.text=v; m.edited=true; renderMsgs(); }
+function recallMsg(id){ const m=curChat().msgs.find(x=>x.id===id); if(!m||m.from!=="__me__")return; if(!confirm("Thu hồi tin nhắn này?"))return; m.recalled=true; renderMsgs(); }
+function chatModal(html,maxw){ closeChatModal(); document.body.insertAdjacentHTML("beforeend",`<div id="chatModal" class="fixed inset-0 z-[80] bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)closeChatModal()"><div class="bg-white rounded-2xl w-full ${maxw||"max-w-sm"} shadow-2xl p-5 max-h-[88vh] overflow-y-auto">${html}</div></div>`); }
+function closeChatModal(){ const e=document.getElementById("chatModal"); if(e)e.remove(); }
+function openPollModal(){ chatModal(`<h3 class="font-bold text-[15px] mb-3">Tạo bình chọn</h3><input id="pollQ" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-[13px] mb-2" placeholder="Câu hỏi (vd: Chọn ngày Kickoff)"><div id="pollOpts">${[0,1].map(i=>`<input class="poll-opt w-full border border-slate-200 rounded-lg px-3 py-2 text-[13px] mb-1.5" placeholder="Lựa chọn ${i+1}">`).join("")}</div><button onclick="addPollOpt()" class="text-[12px] text-${AC}-600 font-semibold mb-3">＋ Thêm lựa chọn</button><div class="flex justify-end gap-2"><button onclick="closeChatModal()" class="border border-slate-200 rounded-lg px-4 py-2 text-[12.5px]">Hủy</button><button onclick="createPoll()" class="bg-${AC}-600 text-white rounded-lg px-4 py-2 text-[12.5px] font-semibold">Tạo</button></div>`); }
+function addPollOpt(){ const box=document.getElementById("pollOpts"); const n=box.querySelectorAll(".poll-opt").length+1; box.insertAdjacentHTML("beforeend",`<input class="poll-opt w-full border border-slate-200 rounded-lg px-3 py-2 text-[13px] mb-1.5" placeholder="Lựa chọn ${n}">`); }
+function createPoll(){ const q=(document.getElementById("pollQ").value||"").trim(); const opts=[...document.querySelectorAll(".poll-opt")].map(i=>i.value.trim()).filter(Boolean); if(!q||opts.length<2){ alert("Nhập câu hỏi và ít nhất 2 lựa chọn."); return; } closeChatModal(); pushMsg({from:"__me__",kind:"poll",poll:{q,opts:opts.map(t=>({t,votes:[]})),locked:false}}); }
+function votePoll(id,idx){ const m=curChat().msgs.find(x=>x.id===id); if(!m||m.poll.locked)return; m.poll.opts.forEach(o=>{const k=o.votes.indexOf(ME.name); if(k>=0)o.votes.splice(k,1);}); m.poll.opts[idx].votes.push(ME.name); renderMsgs(); }
+function lockPoll(id){ const m=curChat().msgs.find(x=>x.id===id); if(m){m.poll.locked=!m.poll.locked; renderMsgs();} }
+function pollWho(id){ const m=curChat().msgs.find(x=>x.id===id); if(!m)return; alert("Kết quả bình chọn:\n"+m.poll.opts.map(o=>`• ${o.t}: ${o.votes.length} (${o.votes.map(v=>v.split(" ").pop()).join(", ")||"—"})`).join("\n")); }
+function openMeetModalChat(){ chatModal(`<h3 class="font-bold text-[15px] mb-3">Tạo lịch hẹn trong chat</h3><input id="mtTitle" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-[13px] mb-2" placeholder="Tiêu đề (vd: Cuộc họp tối ưu Ads)"><div class="grid grid-cols-2 gap-2 mb-2"><input id="mtDate" type="date" value="2026-06-20" class="border border-slate-200 rounded-lg px-3 py-2 text-[13px]"><input id="mtTime" value="15:00 - 16:00" class="border border-slate-200 rounded-lg px-3 py-2 text-[13px]"></div><label class="flex items-center gap-2 text-[12px] text-slate-500 mb-1"><input id="mtSync" type="checkbox" checked class="accent-${AC}-600"> Đồng bộ Lịch công việc & nhắc trước 30 phút</label><div class="flex justify-end gap-2 mt-3"><button onclick="closeChatModal()" class="border border-slate-200 rounded-lg px-4 py-2 text-[12.5px]">Hủy</button><button onclick="createMeeting()" class="bg-${AC}-600 text-white rounded-lg px-4 py-2 text-[12.5px] font-semibold">Tạo</button></div>`); }
+function createMeeting(){ const title=(document.getElementById("mtTitle").value||"").trim()||"Cuộc họp"; const date=document.getElementById("mtDate").value.split("-").reverse().join("/"); const time=document.getElementById("mtTime").value; const sync=document.getElementById("mtSync").checked; closeChatModal(); pushMsg({from:"__me__",kind:"meeting",meeting:{title,date,time,rsvp:{}}}); if(sync) pushMsg({from:"__me__",kind:"system",text:"📅 Đã thêm vào Lịch công việc · sẽ nhắc trước 30 phút"}); }
+function meetRsvp(id,ans){ const m=curChat().msgs.find(x=>x.id===id); if(!m)return; m.meeting.rsvp=m.meeting.rsvp||{}; m.meeting.rsvp[ME.name]=ans; renderMsgs(); }
+function openCreateGroup(){ chatModal(`<h3 class="font-bold text-[15px] mb-3">Tạo nhóm mới</h3><input id="grpName" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-[13px] mb-2" placeholder="Tên nhóm (vd: Nhóm Tuyển sinh)"><div class="text-[11.5px] font-semibold text-slate-500 mb-1">Thêm thành viên</div><div class="flex flex-wrap gap-1.5 mb-3 max-h-32 overflow-y-auto">${USERS.filter(u=>u.name!==ME.name).map(u=>`<label class="flex items-center gap-1.5 border border-slate-200 rounded-full px-2.5 py-1 text-[12px] cursor-pointer"><input type="checkbox" class="grp-mem accent-${AC}-600" value="${u.name}">${u.name.split(" ").pop()}</label>`).join("")}</div><div class="flex items-center justify-between"><button onclick="inviteLink()" class="text-[11.5px] text-${AC}-600 font-semibold">🔗 Mời bằng link</button><div class="flex gap-2"><button onclick="closeChatModal()" class="border border-slate-200 rounded-lg px-4 py-2 text-[12.5px]">Hủy</button><button onclick="createGroup()" class="bg-${AC}-600 text-white rounded-lg px-4 py-2 text-[12.5px] font-semibold">Tạo nhóm</button></div></div>`); }
+function inviteLink(){ prompt("Sao chép link mời (demo):","https://prowork.fpt.edu.vn/invite/"+Math.random().toString(36).slice(2,10)); }
+function createGroup(){ const name=(document.getElementById("grpName").value||"").trim()||"Nhóm mới"; const mems=[...document.querySelectorAll(".grp-mem:checked")].map(c=>c.value); const cols=["emerald","orange","violet","slate"]; const c={id:Date.now(),type:"group",name,color:cols[Math.floor(Math.random()*4)],desc:"",muted:false,members:[ME.name,...mems],admins:[ME.name],perms:{add:"all",poll:"all",meeting:"all"},msgs:[{id:++MID,from:"__me__",kind:"system",text:`Đã tạo nhóm "${name}" · ${mems.length+1} thành viên`,ts:nowHM()}]}; CHATS.unshift(c); closeChatModal(); chatActive=0; mountChat(); }
+function openAddMember(){ const c=curChat(); if(c.type!=="group")return; const cand=USERS.map(u=>u.name).filter(n=>!c.members.includes(n)); if(!cand.length){alert("Tất cả nhân sự đã ở trong nhóm.");return;} chatModal(`<h3 class="font-bold text-[15px] mb-3">Thêm thành viên — ${c.name}</h3><div class="flex flex-wrap gap-1.5 mb-3">${cand.map(n=>`<label class="flex items-center gap-1.5 border border-slate-200 rounded-full px-2.5 py-1 text-[12px] cursor-pointer"><input type="checkbox" class="add-mem accent-${AC}-600" value="${n}">${n.split(" ").pop()}</label>`).join("")}</div><div class="flex justify-end gap-2"><button onclick="closeChatModal()" class="border border-slate-200 rounded-lg px-4 py-2 text-[12.5px]">Hủy</button><button onclick="doAddMember()" class="bg-${AC}-600 text-white rounded-lg px-4 py-2 text-[12.5px] font-semibold">Thêm</button></div>`); }
+function doAddMember(){ const c=curChat(); const adds=[...document.querySelectorAll(".add-mem:checked")].map(x=>x.value); adds.forEach(n=>{ if(!c.members.includes(n))c.members.push(n); }); if(adds.length) c.msgs.push({id:++MID,from:"__me__",kind:"system",text:`Đã thêm ${adds.map(a=>a.split(" ").pop()).join(", ")} vào nhóm`,ts:nowHM()}); closeChatModal(); chatOpen(chatActive); }
+function openGroupSettings(){ GS_TAB="info"; renderGroupSettings(); }
+function openConvSettings(){ const c=curChat(); if(c.type==="group") openGroupSettings(); else openDmSettings(); }
+function openDmSettings(){ const c=curChat(); chatModal(`<div class="flex items-center mb-3"><h3 class="font-bold text-[15px] flex-1">Cài đặt trò chuyện</h3><button onclick="closeChatModal()" class="text-slate-400 text-xl leading-none xclose">×</button></div>
+  <div class="flex items-center gap-3 mb-3">${avatar(c.name)}<div><div class="text-[14px] font-bold">${c.name}</div><div class="text-[11px] text-slate-400">Trò chuyện 1-1 · Nhóm ${teamOf(c.name)}</div></div></div>
+  <div class="border border-slate-200 rounded-xl divide-y divide-slate-50 mb-3 text-[13px]">
+    <button onclick="closeChatModal();toggleMsgSearch()" class="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-slate-50 text-left">${ic("search","w-4 h-4 text-slate-400")}<span>Tìm trong hội thoại</span></button>
+    <button onclick="closeChatModal();openChatSummary()" class="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-slate-50 text-left">${ic("spark","w-4 h-4 text-violet-500")}<span>AI tóm tắt hội thoại</span></button>
+    <a href="work-dna.html" onclick="closeChatModal();toggleChat()" class="w-full flex items-center gap-2 px-3 py-2.5 hover:bg-slate-50">${ic("user","w-4 h-4 text-slate-400")}<span>Xem hồ sơ & đánh giá</span></a>
+  </div>
+  <label class="flex items-center justify-between py-2.5 border-b border-slate-50 text-[13px]"><span>Tắt thông báo</span><input type="checkbox" ${c.muted?"checked":""} onchange="curChat().muted=this.checked;mountChat()" class="w-9 h-5 accent-${AC}-600"></label>
+  <label class="flex items-center justify-between py-2.5 text-[13px]"><span>Ghim hội thoại lên đầu</span><input type="checkbox" class="w-9 h-5 accent-${AC}-600"></label>
+  <button onclick="if(confirm('Xóa toàn bộ lịch sử trò chuyện này?')){curChat().msgs=[];closeChatModal();renderMsgs();mountChat();}" class="mt-3 text-[12px] text-red-500 font-semibold">Xóa lịch sử trò chuyện</button>`,"max-w-sm"); }
+function setGsTab(t){ GS_TAB=t; renderGroupSettings(); }
+function renderGroupSettings(){ const c=curChat(); const admin=isAdmin(c); const tabs=[["info","Thông tin"],["members","Thành viên"],["notif","Thông báo"],["perm","Quyền"]]; let b="";
+  if(GS_TAB==="info"){ b=`<div class="space-y-2.5"><div class="flex items-center gap-3">${chatAvatar(c,"w-14 h-14")}<button ${admin?"":"disabled"} onclick="alert('Đổi avatar nhóm (demo)')" class="text-[12px] text-${AC}-600 font-semibold ${admin?"":"opacity-40"}">Đổi avatar</button></div><div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Tên nhóm</label><input id="gsName" ${admin?"":"disabled"} value="${c.name}" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-[13px] ${admin?"":"bg-slate-50"}"></div><div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Mô tả</label><input id="gsDesc" ${admin?"":"disabled"} value="${c.desc||""}" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-[13px] ${admin?"":"bg-slate-50"}"></div>${admin?`<button onclick="saveGroupInfo()" class="bg-${AC}-600 text-white rounded-lg px-4 py-2 text-[12.5px] font-semibold">Lưu thông tin</button>`:`<div class="text-[11px] text-slate-400">Chỉ quản trị viên mới chỉnh sửa được.</div>`}</div>`; }
+  else if(GS_TAB==="members"){ b=`<div class="text-[11.5px] text-slate-400 mb-2">${c.members.length} thành viên</div><div class="divide-y divide-slate-50 max-h-72 overflow-y-auto">${c.members.map(n=>{const isAd=c.admins.includes(n); const me=n===ME.name; return `<div class="flex items-center gap-2.5 py-2">${avatar(n)}<div class="flex-1 min-w-0"><div class="text-[13px] font-semibold truncate">${n}${me?" (bạn)":""}</div><div class="text-[10.5px] text-slate-400">Nhóm ${teamOf(n)}</div></div>${isAd?`<span class="text-[9.5px] font-bold bg-indigo-100 text-indigo-700 rounded-full px-2 py-0.5">Quản trị</span>`:`<span class="text-[9.5px] font-bold bg-slate-100 text-slate-500 rounded-full px-2 py-0.5">Thành viên</span>`}${admin&&!me?`<div class="flex gap-2 ml-1">${!isAd?`<button onclick="makeAdmin('${n}')" class="text-[10.5px] text-${AC}-600 font-semibold">Cấp Admin</button>`:""}<button onclick="kickMember('${n}')" class="text-[10.5px] text-red-500 font-semibold">Kick</button></div>`:""}</div>`;}).join("")}</div>${admin?`<button onclick="openAddMember()" class="mt-2 text-[12px] text-${AC}-600 font-semibold">＋ Thêm thành viên</button>`:""}`; }
+  else if(GS_TAB==="notif"){ b=`<label class="flex items-center justify-between py-2.5 border-b border-slate-50 text-[13px]"><span>Tắt thông báo nhóm</span><input type="checkbox" ${c.muted?"checked":""} onchange="curChat().muted=this.checked" class="w-9 h-5 accent-${AC}-600"></label><label class="flex items-center justify-between py-2.5 text-[13px]"><span>Chỉ nhận thông báo khi được nhắc (@)</span><input type="checkbox" class="w-9 h-5 accent-${AC}-600"></label>`; }
+  else { const dis=admin?"":"disabled"; b=`<div class="space-y-3 text-[12.5px]">${[["add","Ai được thêm người"],["poll","Ai được tạo Bình chọn"],["meeting","Ai được tạo Lịch hẹn"]].map(o=>`<div class="flex items-center justify-between gap-2"><span>${o[1]}</span><select ${dis} onchange="curChat().perms.${o[0]}=this.value" class="border border-slate-200 rounded-lg px-2 py-1.5 text-[12px] bg-white ${admin?"":"opacity-50"}"><option value="all" ${c.perms[o[0]]==="all"?"selected":""}>Mọi thành viên</option><option value="admin" ${c.perms[o[0]]==="admin"?"selected":""}>Chỉ quản trị viên</option></select></div>`).join("")}</div>`; }
+  const footer=`<div class="flex justify-between mt-4 pt-3 border-t border-slate-100"><button onclick="leaveGroup()" class="text-[12px] text-red-500 font-semibold">Rời nhóm</button>${admin?`<button onclick="dissolveGroup()" class="text-[12px] text-red-600 font-semibold">Giải tán nhóm</button>`:""}</div>`;
+  chatModal(`<div class="flex items-center mb-3"><h3 class="font-bold text-[15px] flex-1">Cài đặt nhóm</h3><button onclick="closeChatModal()" class="text-slate-400 text-xl leading-none xclose">×</button></div><div class="flex bg-slate-100 rounded-lg p-0.5 mb-3 text-[12px] font-semibold">${tabs.map(t=>`<button onclick="setGsTab('${t[0]}')" class="flex-1 py-1.5 rounded-md ${GS_TAB===t[0]?"bg-white text-"+AC+"-700 shadow-sm":"text-slate-500"}">${t[1]}</button>`).join("")}</div>${b}${footer}`,"max-w-md");
+}
+function saveGroupInfo(){ const c=curChat(); c.name=(document.getElementById("gsName").value||c.name).trim(); c.desc=document.getElementById("gsDesc").value; closeChatModal(); renderHead(); mountChat(); }
+function makeAdmin(n){ const c=curChat(); if(!c.admins.includes(n))c.admins.push(n); c.msgs.push({id:++MID,from:"__me__",kind:"system",text:`${n.split(" ").pop()} đã được cấp quyền Quản trị viên`,ts:nowHM()}); renderGroupSettings(); }
+function kickMember(n){ const c=curChat(); if(!confirm(`Mời ${n} ra khỏi nhóm?`))return; c.members=c.members.filter(x=>x!==n); c.admins=c.admins.filter(x=>x!==n); c.msgs.push({id:++MID,from:"__me__",kind:"system",text:`${n.split(" ").pop()} đã bị mời ra khỏi nhóm`,ts:nowHM()}); renderGroupSettings(); }
+function leaveGroup(){ const c=curChat(); if(!confirm("Rời khỏi nhóm này?"))return; CHATS=CHATS.filter(x=>x!==c); closeChatModal(); chatActive=0; mountChat(); }
+function dissolveGroup(){ const c=curChat(); if(!confirm("Giải tán nhóm? Hành động không thể hoàn tác."))return; CHATS=CHATS.filter(x=>x!==c); closeChatModal(); chatActive=0; mountChat(); }
+function chatAssign(){ if(document.getElementById("chatAssignForm"))return; const c=curChat(); const body=document.getElementById("chatBody"); body.insertAdjacentHTML("beforeend",`<div id="chatAssignForm" class="bg-white border border-${AC}-200 rounded-xl p-2.5 text-[12px] shadow-sm"><div class="font-semibold text-${AC}-700 mb-1.5">Giao việc trong "${c.name}"</div><input id="caTitle" class="w-full border border-slate-200 rounded-lg px-2.5 py-1.5 mb-1.5" placeholder="Tên công việc (vd: Viết bài SEO Hà Nam)"><div class="flex gap-1.5"><select id="caProj" class="border border-slate-200 rounded-lg px-2 py-1.5 text-[11.5px] bg-white flex-1">${SPECIALTIES.map(sp=>`<option>${sp}</option>`).join("")}</select><input id="caDue" type="date" value="2026-06-12" class="border border-slate-200 rounded-lg px-2 py-1.5"><button onclick="chatAssignSend()" class="bg-${AC}-600 text-white rounded-lg px-3 font-semibold">Giao</button></div></div>`); body.scrollTop=body.scrollHeight; }
+function chatAssignSend(){ const ti=(document.getElementById("caTitle").value||"").trim(); if(!ti)return alert("Nhập tên công việc trước khi giao."); const proj=document.getElementById("caProj").value; const due=document.getElementById("caDue").value; const f=document.getElementById("chatAssignForm"); if(f)f.remove(); pushMsg({from:"__me__",text:`📋 Đã giao việc: <b>${ti}</b> · ${proj}${due?` · hạn ${due.split("-").reverse().join("/")}`:""}`}); }
+
+function isTaskLike(t){ if(!t)return false; return /(giúp|sửa|làm|viết|thiết kế|chuẩn bị|hoàn thành|deadline|báo cáo|banner|gửi lại|cập nhật|review|kiểm tra|lên kế hoạch)/i.test(t.replace(/<[^>]+>/g,"")); }
+function msgToTask(id){ const m=curChat().msgs.find(x=>x.id===id); if(!m)return; if(typeof openTaskModal==="function"){ openTaskModal(); setTimeout(()=>{ const ti=document.getElementById("tmTitle"); if(ti)ti.value=(m.text||"").replace(/<[^>]+>/g,"").replace(/@[^ ]+/g,"").trim(); const c=curChat(); const r=document.getElementById("tmReceiver"); if(r&&c.type==="dm"){ [...r.options].forEach(o=>{ if(o.value===c.name)r.value=c.name; }); } },40); } }
+let THREAD_MID=null;
+function openThread(id){ THREAD_MID=id; renderThread(); }
+function renderThread(){ const c=curChat(); const m=c.msgs.find(x=>x.id===THREAD_MID); if(!m)return; m.thread=m.thread||[];
+  const parent=`<div class="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-[12.5px] mb-2"><div class="text-[10px] font-semibold text-${AC}-600 mb-0.5">${m.from==="__me__"?"Bạn":m.from}</div>${m.text?fmtTag(m.text):(m.kind==="image"?"📷 Hình ảnh":m.kind==="file"?("📎 "+m.file.name):"Nội dung")}</div>`;
+  const replies=m.thread.map(r=>`<div class="flex ${r.from==="__me__"?"justify-end":""}"><div class="max-w-[80%] ${r.from==="__me__"?`bg-${AC}-600 text-white`:"bg-white border border-slate-200"} rounded-2xl px-3 py-1.5 text-[12.5px]">${r.from!=="__me__"?`<div class="text-[10px] font-semibold text-${AC}-600 mb-0.5">${r.from}</div>`:""}${fmtTag(r.text)}<div class="text-[9px] ${r.from==="__me__"?"text-white/60":"text-slate-400"}">${r.ts}</div></div></div>`).join("")||`<div class="text-center text-slate-300 text-[12px] py-4">Bắt đầu luồng thảo luận riêng…</div>`;
+  chatModal(`<div class="flex items-center gap-2 mb-3"><span>🧵</span><h3 class="font-bold text-[15px] flex-1">Luồng thảo luận</h3><button onclick="closeChatModal()" class="text-slate-400 text-xl leading-none xclose">×</button></div>${parent}<div id="thBody" class="max-h-64 overflow-y-auto space-y-1.5 mb-2">${replies}</div><div class="flex gap-2"><input id="thInput" onkeydown="if(event.key==='Enter')threadSend()" class="flex-1 border border-slate-200 rounded-full px-3 py-1.5 text-[12.5px]" placeholder="Trả lời trong luồng…"><button onclick="threadSend()" class="bg-${AC}-600 text-white rounded-full px-4 text-[11px] font-semibold">Gửi</button></div>`,"max-w-md");
+}
+function threadSend(){ const c=curChat(); const m=c.msgs.find(x=>x.id===THREAD_MID); if(!m)return; const i=document.getElementById("thInput"); const v=(i.value||"").trim(); if(!v)return; m.thread=m.thread||[]; m.thread.push({from:"__me__",text:v,ts:nowHM()}); i.value=""; renderThread(); renderMsgs(); }
+function openThreadList(){ const c=curChat(); const ths=c.msgs.filter(m=>m.thread&&m.thread.length); chatModal(`<div class="flex items-center gap-2 mb-3"><span>🧵</span><h3 class="font-bold text-[15px] flex-1">Chủ đề / Luồng — ${c.name}</h3><button onclick="closeChatModal()" class="text-slate-400 text-xl leading-none xclose">×</button></div>${ths.length?ths.map(m=>`<button onclick="openThread(${m.id})" class="w-full text-left border border-slate-200 rounded-xl px-3 py-2 mb-2 hover:bg-slate-50"><div class="text-[12.5px] font-semibold truncate">${(m.text||m.kind||"Chủ đề").toString().replace(/<[^>]+>/g,"").slice(0,50)}</div><div class="text-[11px] text-slate-400">└── ${m.thread.length} tin nhắn trong luồng</div></button>`).join(""):`<div class="text-center text-slate-400 text-[12.5px] py-6">Chưa có luồng nào.<br>Bấm 🧵 trên một tin nhắn để tách thành luồng riêng.</div>`}`,"max-w-md"); }
+function openChatSummary(){ chatModal(`<div class="flex items-center gap-2 mb-3"><span class="text-violet-600 text-lg">✨</span><h3 class="font-bold text-[15px] flex-1">AI tóm tắt hội thoại</h3><button onclick="closeChatModal()" class="text-slate-400 text-xl leading-none xclose">×</button></div><div class="text-[12px] text-slate-500 mb-2">Chọn khoảng thời gian hoặc nhập yêu cầu:</div><div class="flex flex-wrap gap-1.5 mb-2">${[["today","Hôm nay"],["7d","7 ngày qua"],["all","Toàn bộ"]].map(o=>`<button onclick="doChatSummary('${o[0]}')" class="border border-slate-200 rounded-full px-3 py-1.5 text-[12px] font-semibold hover:border-violet-400 hover:text-violet-600">${o[1]}</button>`).join("")}</div><input id="sumCmd" onkeydown="if(event.key==='Enter')doChatSummary('cmd')" class="w-full border border-slate-200 rounded-lg px-3 py-2 text-[13px] mb-2" placeholder="vd: Tóm tắt các quyết định & deadline tuần này"><button onclick="doChatSummary('cmd')" class="w-full bg-violet-600 text-white rounded-lg py-2 text-[12.5px] font-semibold">Tóm tắt</button><div id="sumOut" class="hidden mt-3 bg-violet-50 border border-violet-100 rounded-xl p-3 text-[12.5px]"></div>`,"max-w-md"); }
+function doChatSummary(range){ const c=curChat(); const out=document.getElementById("sumOut"); if(!out)return; out.classList.remove("hidden"); out.innerHTML='<div class="text-slate-400">Đang tóm tắt hội thoại…</div>';
+  setTimeout(()=>{ const texts=c.msgs.filter(m=>(!m.kind||m.kind==="text")&&!m.recalled).map(m=>(m.text||"").replace(/<[^>]+>/g,"")).filter(Boolean);
+    const meetings=c.msgs.filter(m=>m.kind==="meeting").map(m=>`Lịch hẹn: ${m.meeting.title} — ${m.meeting.date} ${m.meeting.time}`);
+    const polls=c.msgs.filter(m=>m.kind==="poll").map(m=>`Bình chọn: ${m.poll.q}`);
+    const files=c.msgs.filter(m=>m.kind==="file").length;
+    const bullets=[...texts.slice(-6),...meetings,...polls]; if(files)bullets.push(files+" file đã được chia sẻ");
+    const lbl=range==="today"?"Hôm nay":range==="7d"?"7 ngày qua":range==="all"?"Toàn bộ":(document.getElementById("sumCmd")&&document.getElementById("sumCmd").value)||"Theo yêu cầu";
+    out.innerHTML=`<div class="font-bold text-violet-700 mb-1.5">AI Summary · ${lbl}</div><ul class="list-disc pl-4 space-y-1 text-slate-700">${(bullets.length?bullets:["Chưa đủ dữ liệu để tóm tắt."]).map(b=>`<li>${b}</li>`).join("")}</ul><div class="text-[10px] text-slate-400 mt-2">AI có thể sai sót — vui lòng kiểm tra lại.</div>`;
+  },650);
+}
+/* ---- Chat gắn với Task ---- */
+let TC_TAB="chat", TC_TID=null; const TASK_CHAT={};
+function taskChatCardHTML(t){ TC_TID=t.id; TC_TAB="chat";
+  return `<div class="bg-white border border-slate-200 rounded-2xl p-4 mt-4"><div class="flex items-center gap-2 mb-3"><h3 class="font-bold text-[14px] flex-1">Trao đổi trong task</h3><span class="text-[11px] text-slate-400">Mọi trao đổi · file · lịch sử nằm trong task này</span></div><div class="flex bg-slate-100 rounded-lg p-0.5 w-fit mb-3 text-[12.5px] font-semibold"><button id="tc-chat" onclick="setTcTab('chat')" class="px-4 py-1.5 rounded-md bg-white text-${AC}-700 shadow-sm">💬 Chat</button><button id="tc-file" onclick="setTcTab('file')" class="px-4 py-1.5 rounded-md text-slate-500">📎 File</button><button id="tc-log" onclick="setTcTab('log')" class="px-4 py-1.5 rounded-md text-slate-500">🕘 Lịch sử</button></div><div id="tcBody"></div></div>`;
+}
+function setTcTab(t){ TC_TAB=t; ["chat","file","log"].forEach(k=>{const b=document.getElementById("tc-"+k); if(b)b.className="px-4 py-1.5 rounded-md "+(k===t?"bg-white text-"+AC+"-700 shadow-sm":"text-slate-500");}); paintTaskChat(); }
+function paintTaskChat(){ const body=document.getElementById("tcBody"); if(!body)return; const t=TASKS.find(x=>x.id===TC_TID); if(!t)return;
+  if(TC_TAB==="chat"){ const msgs=TASK_CHAT[t.id]||(TASK_CHAT[t.id]=[{from:t.assignee,text:"Em bắt đầu làm task này nhé anh",ts:"hôm qua"},{from:"__me__",text:"Ok, cần gì cứ trao đổi ngay trong task này nhé",ts:"hôm qua"}]);
+    body.innerHTML=`<div class="border border-slate-200 rounded-xl overflow-hidden"><div id="tcMsgs" class="h-56 overflow-y-auto p-3 space-y-1.5 bg-slate-50">${msgs.map(m=>`<div class="flex ${m.from==="__me__"?"justify-end":""}"><div class="max-w-[78%] ${m.from==="__me__"?`bg-${AC}-600 text-white`:"bg-white border border-slate-200"} rounded-2xl px-3 py-1.5 text-[12.5px]">${m.from!=="__me__"?`<div class="text-[10px] font-semibold text-${AC}-600 mb-0.5">${m.from}</div>`:""}${m.text}<div class="text-[9.5px] ${m.from==="__me__"?"text-white/60":"text-slate-400"}">${m.ts}</div></div></div>`).join("")}</div><div class="flex gap-2 p-2 border-t border-slate-100"><input id="tcInput" onkeydown="if(event.key==='Enter')tcSend()" class="flex-1 border border-slate-200 rounded-full px-3 py-1.5 text-[12.5px]" placeholder="Nhắn trong task…"><button onclick="tcSend()" class="bg-${AC}-600 text-white rounded-full px-4 text-[11px] font-semibold">Gửi</button></div></div>`;
+    const mb=document.getElementById("tcMsgs"); if(mb)mb.scrollTop=mb.scrollHeight;
+  } else if(TC_TAB==="file"){ const files=[{n:"Brief_"+t.spec+".pdf",s:"640 KB",by:"Nguyễn Văn Nam",d:"05-06"},{n:"Ket_qua_v1.zip",s:"3.4 MB",by:t.assignee,d:"07-06"}];
+    body.innerHTML=`<div class="border border-slate-200 rounded-xl divide-y divide-slate-50">${files.map(f=>`<div class="flex items-center gap-3 px-3 py-2.5"><span class="text-2xl">📄</span><div class="flex-1 min-w-0"><div class="text-[12.5px] font-semibold truncate">${f.n}</div><div class="text-[10.5px] text-slate-400">${f.s} · ${f.by} · ${f.d}</div></div><button onclick="alert('Tải ${f.n} (demo)')" class="text-[11.5px] font-semibold text-${AC}-600">Tải</button></div>`).join("")}</div><label class="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-${AC}-700 border border-${AC}-200 rounded-lg px-3 py-1.5 cursor-pointer hover:bg-${AC}-50">＋ Tải file lên<input type="file" multiple class="hidden" onchange="alert('Đã chọn '+this.files.length+' file đính kèm vào task (demo)')"></label>`;
+  } else { const ev=[["Tạo task",t.createdAt],["Bắt đầu thực hiện",t.startedAt],["Nộp kết quả",t.submittedAt],["Nghiệm thu",t.acceptedAt]].filter(e=>e[1]);
+    body.innerHTML=`<div class="space-y-2.5">${ev.map(e=>`<div class="flex gap-2 text-[12.5px]"><span class="w-2 h-2 rounded-full bg-${AC}-500 mt-1.5 shrink-0"></span><div><b>${e[0]}</b> <span class="text-slate-400">· ${fmtDue(e[1])}</span></div></div>`).join("")||`<div class="text-slate-400 text-[12px]">Chưa có lịch sử.</div>`}</div>`;
+  }
+}
+function tcSend(){ const i=document.getElementById("tcInput"); if(!i)return; const v=i.value.trim(); if(!v)return; (TASK_CHAT[TC_TID]=TASK_CHAT[TC_TID]||[]).push({from:"__me__",text:v,ts:nowHM()}); i.value=""; paintTaskChat(); }
 
 /* ---------- TRỢ LÝ AI nổi góc phải-dưới (thay cho widget tin nhắn) ---------- */
 /* Trợ lý AI ngữ cảnh: nội dung & gợi ý đổi theo trang/tab đang xem */
@@ -780,7 +831,7 @@ function aiAnswerCtx(q){
 function aiSidePanel(){
   const ctx=aiCtx();
   return `<div id="aiSideCard" class="bg-white border border-slate-200 rounded-2xl flex flex-col overflow-hidden" style="height:calc(100vh - 110px); max-height:620px">
-    <div class="px-4 py-3 border-b border-slate-100 flex items-center gap-2 bg-violet-50"><span class="w-7 h-7 rounded-full bg-violet-600 text-white grid place-items-center text-[11px] font-bold">AI</span><div class="leading-tight"><b class="text-[13px] text-violet-700 block">AI Assistant <span class="text-[9px] align-middle bg-white text-violet-600 rounded-full px-1.5 py-0.5 font-bold">BETA</span></b><span class="text-[10.5px] text-slate-400">Trợ lý cho: ${ctx.name}</span></div></div>
+    <div class="px-4 py-3 border-b border-slate-100 flex items-center gap-2 bg-violet-50"><span class="w-7 h-7 rounded-full bg-violet-600 text-white grid place-items-center text-[11px] font-bold">AI</span><div class="leading-tight"><b class="text-[13px] text-violet-700 block">AI Assistant <span class="text-[9px] align-middle bg-white text-violet-600 rounded-full px-1.5 py-0.5 font-bold">BETA</span></b><span class="text-[10.5px] text-slate-400">Trợ lý cho: ${ctx.name}</span></div><button onclick="document.getElementById('aiPanel').classList.add('hidden')" title="Đóng trợ lý AI" class="ml-auto text-slate-400 text-2xl leading-none xclose">×</button></div>
     <div id="aiwBody" class="flex-1 overflow-y-auto p-3 space-y-2 bg-slate-50 text-[12.5px]"><div class="max-w-[92%] bg-white border border-slate-200 rounded-2xl px-3 py-2 leading-6">Xin chào! Tôi đang hỗ trợ ở <b>${ctx.name}</b>. Chọn một gợi ý bên dưới hoặc nhập câu hỏi của bạn.</div></div>
     <div class="flex flex-wrap gap-1.5 px-3 pb-1.5">${ctx.sugg.map(q=>`<button onclick="aiwAsk('${q.replace(/'/g,"")}')" class="border border-slate-200 rounded-full px-2.5 py-1 text-[11px] text-slate-500 hover:border-violet-400 hover:text-violet-600">${q}</button>`).join("")}</div>
     <div class="p-2.5 border-t border-slate-100 flex gap-2"><input id="aiwInput" onkeydown="if(event.key==='Enter')aiwSend()" class="flex-1 border border-slate-200 rounded-full px-3.5 py-2 text-[12.5px] focus:outline-none focus:ring-2 focus:ring-violet-200" placeholder="Hỏi AI về ${ctx.name}…"><button onclick="aiwSend()" class="bg-violet-600 text-white w-9 h-9 rounded-full shrink-0">Gửi</button></div>
@@ -1425,7 +1476,7 @@ function renderTaskDetail(query) {
           <h3 class="font-bold text-[14px] mb-3">Ghi chú của nhân viên</h3>
           <div class="border border-slate-200 rounded-xl p-3 text-[12.5px] text-slate-600 leading-6">Em đã hoàn thành các đầu việc theo yêu cầu.<br>Anh/chị vui lòng kiểm tra giúp ạ.</div>
           <div id="tdAISum" class="bg-${AC}-50 border border-${AC}-100 rounded-xl p-3 mt-3">
-            <div class="flex items-center gap-1.5 mb-1.5"><span class="text-${AC}-600"></span><b class="text-[12px] text-${AC}-700">AI tóm tắt nội dung nộp</b><span class="text-[9px] font-bold text-${AC}-600 bg-white rounded-full px-1.5 py-0.5">BETA</span><button onclick="document.getElementById('tdAISum').style.display='none'" class="ml-auto text-slate-400 leading-none">×</button></div>
+            <div class="flex items-center gap-1.5 mb-1.5"><span class="text-${AC}-600"></span><b class="text-[12px] text-${AC}-700">AI tóm tắt nội dung nộp</b><span class="text-[9px] font-bold text-${AC}-600 bg-white rounded-full px-1.5 py-0.5">BETA</span><button onclick="document.getElementById('tdAISum').style.display='none'" class="ml-auto text-slate-400 leading-none xclose">×</button></div>
             <ul class="text-[12px] text-slate-600 space-y-1 list-disc pl-4"><li>Đã làm sạch 3.200 bản ghi</li><li>Xóa 245 bản ghi trùng</li><li>Chuẩn hóa email và số điện thoại</li><li>Đính kèm báo cáo chi tiết</li></ul>
             <button onclick="alert('Xem chi tiết (demo)')" class="mt-2 text-[11.5px] font-semibold text-${AC}-700 border border-${AC}-200 rounded-lg px-3 py-1">Xem chi tiết</button>
           </div>
@@ -1471,7 +1522,7 @@ function renderTaskDetail(query) {
 
     <div class="space-y-4">
       <div id="tdAIPanel" class="bg-white border border-slate-200 rounded-2xl p-4">
-        <div class="flex items-center gap-2 mb-3"><span class="w-8 h-8 rounded-lg bg-violet-600 text-white grid place-items-center text-[13px]"></span><b class="text-[14px] text-slate-800">AI Assistant</b><span class="text-[10px] font-bold text-violet-600 bg-violet-50 rounded-full px-2 py-0.5">BETA</span><button onclick="document.getElementById('tdAIPanel').style.display='none'" class="ml-auto text-slate-400 leading-none">×</button></div>
+        <div class="flex items-center gap-2 mb-3"><span class="w-8 h-8 rounded-lg bg-violet-600 text-white grid place-items-center text-[13px]"></span><b class="text-[14px] text-slate-800">AI Assistant</b><span class="text-[10px] font-bold text-violet-600 bg-violet-50 rounded-full px-2 py-0.5">BETA</span><button onclick="document.getElementById('tdAIPanel').style.display='none'" class="ml-auto text-slate-400 leading-none xclose">×</button></div>
         <div class="flex items-center justify-between mb-2"><b class="text-[13px]">Phân tích kết quả nộp</b><span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700">Đánh giá tích cực</span></div>
         <p class="text-[12px] text-slate-500 mb-1.5">AI đã phân tích nội dung và phát hiện:</p>
         <ul class="text-[12.5px] space-y-1 mb-3 list-disc pl-4 text-slate-600"><li>3 file đã nộp đầy đủ</li><li>Checklist hoàn thành 3/5 mục</li><li>Nội dung ghi chú rõ ràng, đầy đủ</li></ul>
@@ -1494,8 +1545,9 @@ function renderTaskDetail(query) {
         <div class="py-1.5"><div class="text-slate-400 mb-1.5">Người giao việc</div><div class="flex items-center gap-2">${avatar("Nguyễn Văn Nam")}<div class="flex-1"><b class="text-[12.5px]">Nguyễn Văn Nam</b><div class="text-[11px] text-slate-400 font-normal">Marketing Manager</div></div><button onclick="alert('Nhắn tin (demo)')" class="text-slate-400"></button></div></div>
       </div>
     </div>
-  </div>`;
+  </div>${taskChatCardHTML(t)}`;
   if(KIND==="personal"){ ["tdSubmitGrid","tdReviewPanel"].forEach(i=>{const e=document.getElementById(i); if(e)e.style.display="none";}); }
+  paintTaskChat();
 }
 function tagHtml(text){ return text.replace(/@([\wÀ-ỹ]+)/g,'<span class="text-'+AC+'-600 font-semibold bg-'+AC+'-50 rounded px-1">@$1</span>'); }
 function insertTag(tag){ const i=document.getElementById("cmt"); i.value=(i.value+" "+tag+" ").replace(/\s+/g," ").trimStart(); i.focus(); }
@@ -1531,7 +1583,7 @@ function openMeetInfo(idx){
   closeEventModal();
   document.body.insertAdjacentHTML("beforeend", `<div id="evtModal" class="fixed inset-0 z-[60] bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)closeEventModal()">
     <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-      <div class="px-5 py-3 border-b border-slate-200 flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span><h3 class="font-bold text-[15px]">${e.title}</h3><button onclick="closeEventModal()" class="ml-auto text-slate-400 text-xl leading-none">×</button></div>
+      <div class="px-5 py-3 border-b border-slate-200 flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-violet-500"></span><h3 class="font-bold text-[15px]">${e.title}</h3><button onclick="closeEventModal()" class="ml-auto text-slate-400 text-xl leading-none xclose">×</button></div>
       <div class="p-5 space-y-2.5 text-[12.5px]">
         <div><span class="text-slate-400">Loại:</span> <b class="text-violet-700">Cuộc họp</b></div>
         <div><span class="text-slate-400">Thời gian:</span> <b>${e.time?e.time+" · ":""}${dowOf(e.d)}, ${String(e.d).padStart(2,"0")}/06/2026</b></div>
@@ -1557,7 +1609,7 @@ function openEventModal(id){
   const dueVal = t.due ? t.due.slice(0,16) : "";
   document.body.insertAdjacentHTML("beforeend", `<div id="evtModal" class="fixed inset-0 z-[60] bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)closeEventModal()">
     <div class="bg-white rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
-      <div class="px-5 py-3 border-b border-slate-200 flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background:${dstat(t)==='late'?C.red:C.blue}"></span><h3 class="font-bold text-[15px]">${t.title}</h3><button onclick="closeEventModal()" class="ml-auto text-slate-400 text-xl leading-none">×</button></div>
+      <div class="px-5 py-3 border-b border-slate-200 flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full" style="background:${dstat(t)==='late'?C.red:C.blue}"></span><h3 class="font-bold text-[15px]">${t.title}</h3><button onclick="closeEventModal()" class="ml-auto text-slate-400 text-xl leading-none xclose">×</button></div>
       <div class="p-5 space-y-3 text-[12.5px]">
         <div class="flex items-center gap-2">${badge(dstat(t))} ${prio(t.prio)}<span class="text-slate-400">Chuyên môn: <b class="text-slate-600">${t.spec}</b></span></div>
         <div class="flex items-center gap-2">${avatar(t.assignee)} <span>Phụ trách: <b>${t.assignee}</b> · Nhóm ${teamOf(t.assignee)}</span></div>
@@ -1591,7 +1643,7 @@ function openSendTask(id){
   closeSendModal();
   document.body.insertAdjacentHTML("beforeend", `<div id="sendModal" class="fixed inset-0 z-[70] bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)closeSendModal()">
     <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden">
-      <div class="px-5 py-3 border-b border-slate-200 flex items-center gap-2"><span class="text-emerald-600 text-lg leading-none">↗</span><h3 class="font-bold text-[15px]">Gửi task cho…</h3><button onclick="closeSendModal()" class="ml-auto text-slate-400 text-xl leading-none">×</button></div>
+      <div class="px-5 py-3 border-b border-slate-200 flex items-center gap-2"><span class="text-emerald-600 text-lg leading-none">↗</span><h3 class="font-bold text-[15px]">Gửi task cho…</h3><button onclick="closeSendModal()" class="ml-auto text-slate-400 text-xl leading-none xclose">×</button></div>
       <div class="p-5 space-y-3 text-[12.5px]">
         <div class="text-slate-500">Task: <b class="text-slate-700">${t.title}</b></div>
         <div><label class="text-[11px] font-semibold text-slate-500 block mb-1">Chọn người nhận</label>
@@ -1873,7 +1925,7 @@ function paintNotifs(){
   const tabs=[["all","Tất cả",c.all],["mention","Nhắc tới tôi",c.mention],["todo","Cần xử lý",c.todo]];
   const list=N.filter(notifPass);
   document.getElementById("content").innerHTML=`<div class="flex gap-2 mb-4 flex-wrap">${tabs.map(([k,l,n])=>`<button onclick="setNotifTab('${k}')" class="px-3.5 py-1.5 rounded-full text-[12px] font-semibold ${NF_TAB===k?`bg-${AC}-600 text-white`:"bg-white border border-slate-200 text-slate-500"}">${l} <span class="${NF_TAB===k?"opacity-80":"text-slate-400"}">${n}</span></button>`).join("")}</div>
-  <div id="list" class="bg-white border border-slate-200 rounded-xl divide-y divide-slate-50">${list.map(n=>`<div class="flex gap-3 px-4 py-3.5 ${n.unread?`bg-${AC}-50/40`:"opacity-70"}"><span class="w-2.5 h-2.5 rounded-full mt-1.5 ${NDOT[n.type]}"></span><div class="flex-1"><b class="text-[13px]">${n.title}</b>${n.body?`<div class="text-[12px] text-slate-500">${n.body}</div>`:""}<div class="text-[10.5px] text-slate-400 mt-0.5">${n.time}</div></div>${n.unread?`<span class="w-2 h-2 rounded-full bg-${AC}-600 mt-2"></span>`:""}</div>`).join("")||`<div class="p-8 text-center text-slate-400 text-[12.5px]">Không có thông báo trong mục này.</div>`}</div>`;
+  <div id="list" class="bg-white border border-slate-200 rounded-xl divide-y divide-slate-50">${list.map(n=>`<a href="${n.link||'#'}" class="flex gap-3 px-4 py-3.5 hover:bg-slate-50 transition ${n.unread?`bg-${AC}-50/40`:"opacity-70"}"><span class="w-2.5 h-2.5 rounded-full mt-1.5 ${NDOT[n.type]}"></span><div class="flex-1"><b class="text-[13px]">${n.title}</b>${n.body?`<div class="text-[12px] text-slate-500">${n.body}</div>`:""}<div class="text-[10.5px] text-slate-400 mt-0.5">${n.time}</div></div>${n.unread?`<span class="w-2 h-2 rounded-full bg-${AC}-600 mt-2"></span>`:""}</a>`).join("")||`<div class="p-8 text-center text-slate-400 text-[12.5px]">Không có thông báo trong mục này.</div>`}</div>`;
 }
 function markAll(){ document.querySelectorAll("#list > div").forEach(d=>d.className="flex gap-3 px-4 py-3.5 opacity-70"); }
 
@@ -1919,9 +1971,39 @@ function profileUpload(input){ const f=input.files&&input.files[0]; if(!f)return
 function profileSave(){ const n=(document.getElementById("pfName").value||"").trim(); const t=(document.getElementById("pfTitle").value||"").trim(); if(n)localStorage.setItem("pw_name_"+ROLE,n); if(t)localStorage.setItem("pw_title_"+ROLE,t); alert("Đã lưu hồ sơ. Tên & ảnh đại diện áp dụng trên toàn hệ thống."); location.reload(); }
 
 let moodSel=null;
-function renderMoodCheck(){ moodSel=null; renderShell("mood-check.html","Mood check cuối ngày","AI hỏi mỗi ngày 17:00 — giúp leader hỗ trợ kịp thời",""); document.getElementById("content").innerHTML=`<div class="max-w-xl mx-auto mt-6"><div class="bg-white border border-slate-200 rounded-2xl p-7 text-center shadow-sm"><h2 class="text-lg font-extrabold mb-1">Hôm nay của bạn thế nào?</h2><p class="text-[12.5px] text-slate-500 mb-5">Câu trả lời chỉ hiển thị cho quản lý ở dạng tổng hợp.</p><div class="grid grid-cols-3 gap-3 mb-4">${MOODS.map(([k,e,l])=>`<button id="m-${k}" onclick="moodSelect('${k}')" class="border-2 border-slate-200 rounded-2xl py-5 hover:border-${AC}-400"><div class="text-3xl">${e}</div><div class="text-[12.5px] font-bold mt-1">${l}</div></button>`).join("")}</div><textarea rows="2" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-[12.5px] mb-4" placeholder="Chia sẻ thêm…"></textarea><button onclick="submitMood()" class="w-full bg-emerald-600 text-white font-bold rounded-xl py-3">Gửi</button><p id="ok" class="hidden mt-4 text-[12.5px] bg-emerald-50 text-emerald-700 rounded-lg px-3 py-2.5">Cảm ơn bạn! Đã ghi nhận mood hôm nay.</p></div><div class="mt-4 bg-white border border-slate-200 rounded-xl p-4 text-[12.5px]"><h3 class="font-semibold text-[13px] mb-2">Lịch sử 7 ngày của tôi</h3><div class="flex gap-2">${["","","","","","","—"].map((m,i)=>`<div class="flex-1 text-center"><div class="text-xl">${m}</div><div class="text-[10px] text-slate-400">${["T2","T3","T4","T5","T6","T7","CN"][i]}</div></div>`).join("")}</div></div></div>`; }
-function moodSelect(k){ moodSel=k; ["normal","pressured","very"].forEach(x=>{const b=document.getElementById("m-"+x); b.className=b.className.replace(` border-${AC}-600 bg-${AC}-50`,""); if(x===k)b.className+=` border-${AC}-600 bg-${AC}-50`;}); }
-function submitMood(){ if(!moodSel)return alert("Hãy chọn một mức cảm xúc nhé!"); document.getElementById("ok").classList.remove("hidden"); }
+function renderMoodCheck(){ moodSel=null; renderShell("mood-check.html","Mood check — Khảo sát tâm trạng", IS_BOSS?"Tổng hợp tâm trạng & cảm xúc làm việc của team hôm nay":"Chia sẻ tâm trạng hôm nay — quản lý sẽ nắm tình hình để hỗ trợ bạn kịp thời",""); document.getElementById("content").innerHTML = IS_BOSS ? moodBossHTML() : moodStaffHTML(); }
+function moodChip(k){ const m=MOOD_MAP[k]; if(!m) return `<span class="text-slate-300 text-[12px]">— chưa trả lời —</span>`; const c=m[3]; return `<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11.5px] font-semibold bg-${c}-100 text-${c}-700"><span>${m[1]}</span>${m[2]}</span>`; }
+function moodStaffHTML(){
+  return `<div class="max-w-xl mx-auto mt-2">
+    <div class="bg-white border border-slate-200 rounded-2xl p-7 text-center shadow-sm">
+      <h2 class="text-lg font-extrabold mb-1">Hôm nay của bạn thế nào?</h2>
+      <p class="text-[12.5px] text-slate-500 mb-5">Câu trả lời chỉ hiển thị cho quản lý ở dạng tổng hợp để hỗ trợ bạn kịp thời.</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">${MOODS.map(([k,e,l,c])=>`<button id="m-${k}" onclick="moodSelect('${k}')" class="border-2 border-slate-200 rounded-2xl py-5 hover:border-${c}-400 transition"><div class="text-4xl">${e}</div><div class="text-[12.5px] font-bold mt-1.5">${l}</div></button>`).join("")}</div>
+      <textarea id="moodNote" rows="2" class="w-full border border-slate-200 rounded-xl px-3 py-2 text-[12.5px] mb-4" placeholder="Chia sẻ thêm (không bắt buộc)…"></textarea>
+      <button onclick="submitMood()" class="w-full bg-${AC}-600 hover:bg-${AC}-700 text-white font-bold rounded-xl py-3">Gửi cảm xúc hôm nay</button>
+      <p id="ok" class="hidden mt-4 text-[12.5px] bg-emerald-50 text-emerald-700 rounded-lg px-3 py-2.5">Cảm ơn bạn! Đã ghi nhận tâm trạng hôm nay. Quản lý sẽ thấy tổng hợp của team.</p>
+    </div>
+    <div class="mt-4 bg-white border border-slate-200 rounded-xl p-4"><h3 class="font-semibold text-[13px] mb-2">Lịch sử 7 ngày của tôi</h3><div class="flex gap-2">${["happy","happy","pressured","normal","happy","pressured",null].map((m,i)=>`<div class="flex-1 text-center"><div class="text-2xl">${m?MOOD_MAP[m][1]:"—"}</div><div class="text-[10px] text-slate-400 mt-0.5">${["T2","T3","T4","T5","T6","T7","CN"][i]}</div></div>`).join("")}</div></div>
+  </div>`;
+}
+function moodBossHTML(){
+  const names=MEMBERS; const counts={}; MOODS.forEach(([k])=>counts[k]=0); names.forEach(n=>{ const k=MOOD_TODAY[n]; if(k)counts[k]++; });
+  const answered=names.filter(n=>MOOD_TODAY[n]).length; const need=names.filter(n=>["pressured","burst"].includes(MOOD_TODAY[n]));
+  return `<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">${MOODS.map(([k,e,l,c])=>`<button onclick="openMoodPopup('${k}')" class="bg-white border border-slate-200 rounded-xl p-4 text-center w-full hover:border-${c}-300 hover:ring-2 hover:ring-${c}-100 transition"><div class="text-3xl">${e}</div><div class="text-[22px] font-extrabold text-${c}-600 mt-1">${counts[k]}</div><div class="text-[12px] text-slate-500">${l}</div><div class="text-[10.5px] text-slate-400 mt-0.5">bấm để xem</div></button>`).join("")}</div>
+  ${need.length?`<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-4 text-[12.5px] text-amber-800"><b>${need.length} bạn đang cần quan tâm</b> — ${need.map(n=>`${n.split(" ").pop()} (${MOOD_MAP[MOOD_TODAY[n]][2].toLowerCase()})`).join(", ")}. Nên trò chuyện 1-1 hoặc điều phối bớt việc giúp các bạn.</div>`:`<div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 mb-4 text-[12.5px] text-emerald-800">Team đang ổn — không có ai báo áp lực/bùng nổ hôm nay. 👍</div>`}
+  <div class="bg-white border border-slate-200 rounded-xl p-4"><div class="flex items-center mb-3"><h3 class="font-bold text-[14px]">Tâm trạng hôm nay của từng nhân sự</h3><span class="ml-auto text-[11.5px] text-slate-400">${answered}/${names.length} đã trả lời</span></div>
+    <div class="divide-y divide-slate-50">${names.map(n=>`<div class="flex items-center gap-3 py-2.5"><div class="flex items-center gap-2 flex-1">${avatar(n)}<div><div class="text-[13px] font-semibold text-slate-700">${n}</div><div class="text-[10.5px] text-slate-400">Nhóm ${teamOf(n)}</div></div></div>${moodChip(MOOD_TODAY[n])}</div>`).join("")}</div></div>`;
+}
+function moodSelect(k){ moodSel=k; MOODS.forEach(([x])=>{const b=document.getElementById("m-"+x); if(!b)return; b.className=b.className.replace(/ border-\w+-600 bg-\w+-50/g,""); if(x===k){const c=MOOD_MAP[k][3]; b.className+=` border-${c}-600 bg-${c}-50`;}}); }
+function submitMood(){ if(!moodSel)return alert("Hãy chọn một mức cảm xúc nhé!"); MOOD_TODAY[ME.name]=moodSel; const ok=document.getElementById("ok"); if(ok)ok.classList.remove("hidden"); }
+function openMoodPopup(k){
+  const m=MOOD_MAP[k]; if(!m) return;
+  const people=MEMBERS.filter(n=>MOOD_TODAY[n]===k);
+  closeMoodPop();
+  const rows = people.length ? people.map(n=>`<div class="flex items-center gap-3 px-1 py-2.5 border-b border-slate-50 last:border-0">${avatar(n)}<div class="flex-1"><div class="text-[13px] font-semibold text-slate-700">${n}</div><div class="text-[10.5px] text-slate-400">Nhóm ${teamOf(n)}</div></div><a href="work-dna.html" class="text-[11.5px] font-semibold text-${AC}-600">Xem đánh giá →</a></div>`).join("") : `<div class="p-8 text-center text-slate-400 text-[12.5px]">Không có ai ở mức này hôm nay.</div>`;
+  document.body.insertAdjacentHTML("beforeend", `<div id="moodPop" class="fixed inset-0 z-[60] bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)closeMoodPop()"><div class="bg-white rounded-2xl w-full max-w-md shadow-2xl overflow-hidden"><div class="px-5 py-3 border-b border-slate-200 flex items-center gap-2"><span class="text-2xl">${m[1]}</span><h3 class="font-bold text-[15px]">${m[2]} <span class="text-slate-400 font-normal">· ${people.length} người</span></h3><button onclick="closeMoodPop()" class="ml-auto text-slate-400 text-xl leading-none xclose">×</button></div><div class="p-4 max-h-[60vh] overflow-y-auto">${rows}</div></div></div>`);
+}
+function closeMoodPop(){ const e=document.getElementById("moodPop"); if(e)e.remove(); }
 
 function renderAdmin(){
   if(!IS_BOSS){ location.hash="#dashboard.html"; return; }
@@ -2056,7 +2138,7 @@ function paintResources(){
 function resCreateModalHTML(){
   return `<div id="resModal" class="hidden fixed inset-0 z-[60] bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)resCloseCreate()">
     <div class="bg-white rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
-      <div class="px-6 py-4 border-b border-slate-100 flex items-center"><h2 class="font-bold text-[16px]">Tạo file mới</h2><button onclick="resCloseCreate()" class="ml-auto text-slate-400 text-xl leading-none">×</button></div>
+      <div class="px-6 py-4 border-b border-slate-100 flex items-center"><h2 class="font-bold text-[16px]">Tạo file mới</h2><button onclick="resCloseCreate()" class="ml-auto text-slate-400 text-xl leading-none xclose">×</button></div>
       <div class="p-6 grid md:grid-cols-[1fr_230px] gap-6 overflow-y-auto">
         <div class="space-y-4">
           <div><label class="text-[12px] font-semibold text-slate-600 block mb-1">Tên tài liệu <span class="text-red-500">*</span></label><input id="rcName" class="w-full border border-slate-200 rounded-lg px-3 py-2.5 text-[13px]" placeholder="Nhập tên tài liệu"></div>
@@ -2164,7 +2246,7 @@ function openInfoModal(title, html){
   closeTaskPop();
   document.body.insertAdjacentHTML("beforeend", `<div id="taskPop" class="fixed inset-0 z-[60] bg-slate-900/40 grid place-items-center p-4" onclick="if(event.target===this)closeTaskPop()">
     <div class="bg-white rounded-2xl w-full max-w-2xl max-h-[82vh] overflow-hidden flex flex-col shadow-2xl">
-      <div class="px-5 py-3 border-b border-slate-200 flex items-center"><h3 class="font-bold text-[15px]">${title}</h3><button onclick="closeTaskPop()" class="ml-auto text-slate-400 text-xl leading-none">×</button></div>
+      <div class="px-5 py-3 border-b border-slate-200 flex items-center"><h3 class="font-bold text-[15px]">${title}</h3><button onclick="closeTaskPop()" class="ml-auto text-slate-400 text-xl leading-none xclose">×</button></div>
       <div class="overflow-y-auto p-4 text-[13px]">${html}</div>
     </div></div>`);
 }
@@ -2692,7 +2774,7 @@ const ROUTES = {
   "leaves.html":renderLeaves, "work-dna.html":renderWorkDNA, "reports.html":renderReports,
   "resources.html":renderResources,
   "notifications.html":renderNotifications, "profile.html":renderProfile,
-  "admin-settings.html":renderAdmin, "permissions.html":renderPermissions,
+  "admin-settings.html":renderAdmin, "permissions.html":renderPermissions, "mood-check.html":renderMoodCheck,
 };
 document.addEventListener("click", (e) => {
   const a = e.target.closest("a"); if (!a) return;
